@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Quote_check</class>
+ <widget class="QWidget" name="Quote_check">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>报价审核</string>
+  </property>
+  <property name="toolTip">
+   <string/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="Button_pass">
+       <property name="toolTip">
+        <string>审核通过</string>
+       </property>
+       <property name="text">
+        <string>通过</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/Accept_24px.ico</normaloff>../images/Accept_24px.ico</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Button_nopass">
+       <property name="toolTip">
+        <string>审核未通过</string>
+       </property>
+       <property name="text">
+        <string>未通过</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/stop_32px.ico</normaloff>../images/stop_32px.ico</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Button_edit">
+       <property name="toolTip">
+        <string>修改报价</string>
+       </property>
+       <property name="text">
+        <string>修改</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/modify_24px.png</normaloff>../images/modify_24px.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Box_group">
+       <property name="toolTip">
+        <string>分组</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Box_filter">
+       <property name="toolTip">
+        <string>筛选</string>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Button_query">
+       <property name="text">
+        <string>查询</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../images/find_24px_28620.png</normaloff>../images/find_24px_28620.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="Line_search">
+       <property name="toolTip">
+        <string>搜索</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>搜索....</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTableWidget" name="Quote_list">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>报价清单</string>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>公司名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>报价单号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>总数量</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>总价</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>业务员</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>报价日期</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>状态</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTableView" name="tableView"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

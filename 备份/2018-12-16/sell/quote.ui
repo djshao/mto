@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Fquote</class>
+ <widget class="QWidget" name="Fquote">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>报价单</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>7</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>7</number>
+       </property>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>678</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="PBnew">
+         <property name="text">
+          <string>新建</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../images/new_file_32px.png</normaloff>../images/new_file_32px.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="PBquery">
+         <property name="text">
+          <string>查询</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../images/preview_text_24px.png</normaloff>../images/preview_text_24px.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="PBexport">
+         <property name="text">
+          <string>导出</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../images/export_32px_1096648.png</normaloff>../images/export_32px_1096648.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="PBsave">
+         <property name="text">
+          <string>保存</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../images/save_24px.png</normaloff>../images/save_24px.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>18</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>无锡市星达石化配件有限公司报价单</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,3,0,1">
+       <property name="leftMargin">
+        <number>7</number>
+       </property>
+       <property name="rightMargin">
+        <number>7</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>公司名称:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="CBcorporate">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>300</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>报价单号:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="quotationNo"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="TWquote">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text">
+       <string>序号</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignLeading|AlignVCenter</set>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>制造标准</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>规格型号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>材质</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>数量</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>工作令号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>件号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>单价</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>总价(元)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>单重(KG)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>公斤价</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>加工费</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>其他费用</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>备注</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>30</number>
+     </property>
+     <property name="rightMargin">
+      <number>35</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>14</number>
+     </property>
+     <item row="0" column="2" colspan="3">
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>编制人:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_4</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_5">
+       <property name="text">
+        <string>0510-85591538</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="9" colspan="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>报价日期:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>quotedate</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="11">
+      <widget class="QDateEdit" name="quotedate">
+       <property name="dateTime">
+        <datetime>
+         <hour>0</hour>
+         <minute>0</minute>
+         <second>0</second>
+         <year>2018</year>
+         <month>12</month>
+         <day>1</day>
+        </datetime>
+       </property>
+       <property name="currentSection">
+        <enum>QDateTimeEdit::DaySection</enum>
+       </property>
+       <property name="calendarPopup">
+        <bool>true</bool>
+       </property>
+       <property name="currentSectionIndex">
+        <number>2</number>
+       </property>
+       <property name="timeSpec">
+        <enum>Qt::LocalTime</enum>
+       </property>
+       <property name="date">
+        <date>
+         <year>2018</year>
+         <month>12</month>
+         <day>1</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>交货期:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_8</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>金额合计(大写):</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_8">
+       <property name="text">
+        <string>30天</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="9">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>总价:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_3</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="10" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_3"/>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>联系电话:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_5</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_4">
+       <property name="text">
+        <string>马萍</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="8">
+      <widget class="QLineEdit" name="lineEdit_6">
+       <property name="text">
+        <string>0510-85591761</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="QLineEdit" name="lineEdit_2"/>
+     </item>
+     <item row="0" column="7">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>总数量:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_2</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>传真:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_6</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="11">
+      <widget class="QLineEdit" name="lineEdit_9">
+       <property name="text">
+        <string>5天</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="9">
+      <widget class="QLabel" name="label_10">
+       <property name="toolTip">
+        <string>报价有效期</string>
+       </property>
+       <property name="text">
+        <string>报价有效期:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit_9</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

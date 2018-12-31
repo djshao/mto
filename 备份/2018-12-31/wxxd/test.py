@@ -1,0 +1,1 @@
+from sall.sell import Quote

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1035</width>
+    <height>741</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ERP</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>141</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>200</width>
+      <height>1080</height>
+     </size>
+    </property>
+    <column>
+     <property name="text">
+      <string>无锡星达</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/2 (2).jpg</normaloff>images/2 (2).jpg</iconset>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>销售</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/telemarketer_16px_1192881_easyicon.net.ico</normaloff>images/telemarketer_16px_1192881_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>报价</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>订单</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>合同</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>制造</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/machine_16px_41420_easyicon.net.ico</normaloff>images/machine_16px_41420_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>生产</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>生产单</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>生产计划</string>
+       </property>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>锻造</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>本厂锻造</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>外协锻造</string>
+       </property>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>热处理</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>机械加工</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>车加工</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>线切割</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>本厂加工</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>外协加工</string>
+       </property>
+      </item>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>质检</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/measurement_16px_26224_easyicon.net.ico</normaloff>images/measurement_16px_26224_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>硬度</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>冲击</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>拉伸</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>UT</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>PT</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MT</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>终检</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>采购</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/buy_32px_1163674_easyicon.net.ico</normaloff>images/buy_32px_1163674_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>采购订单</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收货</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>仓库</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/warehouse_16px_573203_easyicon.net.ico</normaloff>images/warehouse_16px_573203_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>五金库</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>成品库</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>锻件库</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>废品库</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>财务</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/Finance_16px_529695_easyicon.net.ico</normaloff>images/Finance_16px_529695_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>锻造结算</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>机加结算</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>物流结算</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>差旅结算</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>物流</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/logistics_16px_1173566_easyicon.net.ico</normaloff>images/logistics_16px_1173566_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>发货</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>随货试样</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>质保</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/certificate_mail_safe_16px_4221_easyicon.net.ico</normaloff>images/certificate_mail_safe_16px_4221_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>售后</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>图纸</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/Applications_16px_1070727_easyicon.net.ico</normaloff>images/Applications_16px_1070727_easyicon.net.ico</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>资源</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/patientfile_16px_26208_easyicon.net.ico</normaloff>images/patientfile_16px_26208_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>人力资源</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>客户信息</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>协作单位</string>
+      </property>
+     </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>查询</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>images/query_32px_511256_easyicon.net.ico</normaloff>images/query_32px_511256_easyicon.net.ico</iconset>
+     </property>
+     <item>
+      <property name="text">
+       <string>报表</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>生产进度</string>
+      </property>
+     </item>
+    </item>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>0</y>
+      <width>871</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>工作区</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QComboBox" name="comboBox"/>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_2"/>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1" rowspan="3">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>修改</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="text">
+          <string>退出</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>查询</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../Downloads/search_query_document_32px_519936_easyicon.net.ico</normaloff>../../../Downloads/search_query_document_32px_519936_easyicon.net.ico</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>379</y>
+      <width>871</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1035</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_10">
+    <property name="title">
+     <string>窗口</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_12">
+    <property name="title">
+     <string>系统设置</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_13">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="NewAction"/>
+    <addaction name="OpenAction"/>
+    <addaction name="SaveAction"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_12"/>
+   <addaction name="menu_10"/>
+   <addaction name="menu_13"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="NewAction"/>
+   <addaction name="OpenAction"/>
+   <addaction name="SaveAction"/>
+  </widget>
+  <action name="NewAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../Pictures/ICO/New.ico</normaloff>../../../Pictures/ICO/New.ico</iconset>
+   </property>
+   <property name="text">
+    <string>新建</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
+   </property>
+  </action>
+  <action name="OpenAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>images/Open64.ico</normaloff>images/Open64.ico</iconset>
+   </property>
+   <property name="text">
+    <string>打开</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+O</string>
+   </property>
+  </action>
+  <action name="SaveAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../Pictures/ICO/disk_save_all_32px_4650_easyicon.net.ico</normaloff>../../../Pictures/ICO/disk_save_all_32px_4650_easyicon.net.ico</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>962</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>898</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
