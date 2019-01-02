@@ -16,19 +16,7 @@
   <property name="toolTip">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,4">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -174,102 +162,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="Quote_detail">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string>报价明细</string>
-     </property>
-     <column>
-      <property name="text">
-       <string>公司名称</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>报价单号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>序号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>名称</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>制造标准</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>规格型号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>材质</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>数量</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>工作令号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>件号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>单价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>总价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>单重</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>公斤价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>加工费</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>其他费用</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>备注</string>
-      </property>
-     </column>
-    </widget>
+    <widget class="QTableView" name="tableView"/>
    </item>
   </layout>
  </widget>

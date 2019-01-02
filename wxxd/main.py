@@ -25,7 +25,7 @@ from sale.sale import Quote, QuoteExamine, Order
 # from sell.Ui_offer import Ui_offer_Form
 
 class Ui_ERP(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):                         #__init__要两个下划线
+    def __init__(self, parent=None):
         super(Ui_ERP,self).__init__(parent)
         self.setupUi(self)
         self.setCentralWidget(FirstForm())
