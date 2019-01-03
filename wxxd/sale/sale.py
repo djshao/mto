@@ -452,6 +452,12 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.setupUi(self)
         self.quote_list()
 
+        # item = QTableWidgetItem(str(temp_data))
+        # item.setFlags(NoItemFlags)
+        # self.Quote_list.setItem(i, j, item)
+
+        # self.Quote_detail.item(0, 11).setFlags(NoItemFlags)
+
         #连接槽
         self.Quote_list.itemClicked.connect(self.query_detail)  # 点击报价目录,显示选择的报价明细
         self.Button_query.clicked.connect(self.query_list)    # 点击查询查报价清单
@@ -497,24 +503,6 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.Quote_list.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
         splitter.addWidget(self.Quote_list)
         self.verticalLayout.addWidget(splitter)
-        self.quote_detail()
-
-    def quote_detail(self):
-        """审核报价明细区域"""
-        # 数据库model法
-        # db = connectDB()
-        # self.tablemodel = QSqlTableModel()
-        # self.Quote_detail.setModel(self.tablemodel)
-        # self.tablemodel.setEditStrategy(QSqlTableModel.OnFieldChange)
-        # self.tablemodel.setTable("quote")
-        # self.tablemodel.select()
-        # self.tablemodel.setHeaderData(0, Qt.Horizontal, "公司名称")
-
-        data_3 = myMdb().fetchall(table='quote')
-        # col_lst_3 = [tup[0] for tup in cur_3.description]
-        vol_3 = len(data_3[0])                                     # 获得data的列数.cur.description  len(data[0]) 
-        # self.Quote_detail = QTableWidget(0, vol_3)                 # 初始界面显示标题不用显示明细数据,所以QTableWidget(0,vol_3)
-        self.Quote_detail.setRowCount(500)
         font = QtGui.QFont('微软雅黑', 9)
         self.Quote_detail.horizontalHeader().setFont(font)         # 设置行表头字体
         # self.Quote_detail.setHorizontalHeaderLabels(col_lst_3)     # 设置标题
@@ -527,7 +515,7 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.Quote_list.resizeRowsToContents()
         # self.Quote_detail.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
         self.Quote_detail.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
-        splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        # splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(self.Quote_detail)
         self.verticalLayout.addWidget(splitter)
         # self.setLayout(self.verticalLayout)                      # 加这行后查询后可以更新,不用再addwidget,待搞明白?
@@ -568,7 +556,6 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         
         data_3 = myMdb().fetchall(table='quote', where="报价单号=" +bjdh)
         # col_lst_3 = [tup[0] for tup in cur_3.description]
-        # print(data_3)
         row_3 = len(data_3)                            # 获得data的行数
         vol_3 = len(data_3[0])                         # 获得data的列数.cur.description len(data[0])
         self.Quote_detail.setRowCount(row_3)
@@ -578,6 +565,8 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
             for j in range(vol_3):
                 temp_data = data_3[i][j]                           # 临时记录，不能直接插入表格
                 data3 = QTableWidgetItem(str(temp_data))           # 转换后可插入表格
+                if j in (0, 1, 2, 3, 4, 5, 6, 8, 9, 11, 16):
+                    data3.setFlags(QtCore.Qt.NoItemFlags)  # 禁止指定列编辑
                 self.Quote_detail.setItem(i, j, data3)
         # 适应列宽/行高/最后一列对齐边框
         self.Quote_detail.resizeColumnsToContents()
@@ -586,7 +575,7 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         # 启用事件信号
         self.Quote_detail.blockSignals(False)
 
-    #单击一个单元格，即可获得其中的字符
+    # 单击一个单元格，即可获得其中的字符
     def outSelect(self, Item=None):
         """单击一个单元格，即可获得其中的字符"""
         if Item == None:
@@ -595,7 +584,7 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         global table_value
         table_value = Item.text()
 
-    # 当单元格中的数据发生变化时，设置颜色打印变更值
+    # 当单元格中的数据发生变化时，设置颜色打印变更值====需增加忽悠与价格无关的变更事件
     @pyqtSlot(int, int)
     def on_Quote_detail_cellChanged(self, row, col):
         # if item == None:
@@ -604,25 +593,42 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
             return
         item = self.Quote_detail.item(row, col)
         txt = item.text()
-        item.setForeground(QBrush(QColor(255, 0, 0)))
+        self.Quote_detail.blockSignals(True)  # 暂停单元格修改信号
+        # 字体颜色（红色）
+        # item.setForeground(QBrush(QColor(255, 0, 0)))
+        # 背景颜色（红色）
+        self.Quote_detail.item(row, col).setBackground(QBrush(QColor(255, 0, 0)))
+        self.Quote_detail.blockSignals(False)  # 启动单元格修改信号
         # 报价单号
-        bjdh = self.Quote_detail.item (row,1).text()
+        bjdh = self.Quote_detail.item(row, 1).text()
         # 序号
-        xh = self.Quote_detail.item (row,2).text()
+        xh = self.Quote_detail.item(row, 2).text()
         # 屏幕左下状态栏显示提示信息??????????????????????
         # self.statusBar().showMessage('序号%s数据改变为:%s'%(txt, xh)) 
         # 被修改单元格的列标题
         lie = self.Quote_detail.horizontalHeaderItem(col).text()
-        # print('序号%s的%s:%s修改为:%s'%(xh, lie, table_value, txt))
-        record = '序号%s的%s:%s修改为:%s'%(xh, lie, table_value, txt)
-        # 更新数据库记录
-        myMdb().update(table='quote',修改记录=record, where="报价单号="+bjdh+ " and 序号="+xh)
+        record = '%s:%s修改为%s,'%(lie, table_value, txt)
+        xgjl = 'concat(修改记录,'+"'"+record+"'"+')'
+        # 更新-数据库修改记录
+        myMdb().update(table='quote', where="报价单号="+bjdh+ " and 序号="+xh, 修改记录=xgjl)
+
+        # sql原始拼接法
+        # db = pymysql.connect(
+        #   host='127.0.0.1', port=3308, user='root', password='root', db='mrp',charset='utf8',)
+        # cur = db.cursor()
+        # sql = 'update quote set 修改记录=concat(修改记录,'
+        # sql += "'"+record+"'"+') where 报价单号='
+        # sql += bjdh+' and 序号='+xh
+        # cur.execute(sql)
+        # db.commit()
+        # print(xgjl)
+
         # 重新计算汇总
         self.Quote_detail_calculate(row)
-        # 汇总总数量/总价,保存到数据库表中
+        # 汇总总数量/总价,更新到数据库表中
         count_1 = self.sum_amount_1(7).quantize(Decimal('0'))
         count_2 = self.sum_amount_1(11).quantize(Decimal('0'))
-        myMdb().update(table='报价基本信息', 总数量=count_1, 总价=count_2, where="报价单号="+bjdh+ " and 序号="+xh)
+        myMdb().update(table='报价基本信息', 总数量=count_1, 总价=count_2, where="报价单号="+bjdh)
         # print(record)
 
     def Quote_detail_calculate(self, row):
@@ -663,7 +669,7 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.Quote_detail.setItem(row, 11, QTableWidgetItem(str('%.2f' % amount))) 
         self.Quote_detail.blockSignals(False)  # 恢复单元格修改信号
 
-        # 计算列值总数函数
+    # 计算列值总数函数
     def sum_amount_1(self, l):
         """计算所选列的总数,l为列数"""
         count = 0

@@ -44,23 +44,23 @@ class myMdb(object):
             # print('连接数据库')
             self.__db = mdb.connect(host=host,port=int(port),user=user,passwd=passwd,db=db,charset=charset)
             #创建一个游标对象 cursor
-            self.__cursor = self.__db.cursor()# 转换公司名称下拉列表框时不用字典类型,待研究转换字典类型????????????????????????
+            self.__cursor = self.__db.cursor()
             # self.__cursor = self.__db.cursor(cursor=mdb.cursors.DictCursor) # 游标类型为字典类型
         return self._instance
 
     #返回执行execute()方法后影响的行数 
-    def execute(self,sql):
+    def execute(self, sql):
         self.__cursor.execute(sql)
         rowcount = self.__cursor.rowcount
         return rowcount
 
-    #增->返回新增ID
-    def insert(self,**kwargs):
+    # 增->返回新增ID
+    def insert(self, **kwargs):
         table = kwargs['table'] # 取字典中的table值
         del kwargs['table']
         sql = 'insert into %s set '%table
-        for k,v in kwargs.items():
-            sql += "`%s`='%s',"%(k,v)
+        for k, v in kwargs.items():
+            sql += "`%s`='%s',"%(k, v)
         sql = sql.rstrip(',') # rstrip() 删除 string 字符串末尾的指定的','字符.（默认为空格）
         # a = "on duplicate key update"
         # sql = sql +" " +a
@@ -79,9 +79,9 @@ class myMdb(object):
         else:
             return res
 
-    def insert_many(self,sql,param): # 批量插入executemany
-        """批量插入数据库"""
-        a = "ON DUPLICATE KEY UPDATE"
+    def insert_many(self, sql, param): # 批量插入executemany
+        """executemany批量插入数据库"""
+        a = "ON DUPLICATE KEY UPDATE"  # 自动判断是否有记录,待研究??????
         try:
             self.__cursor.executemany(sql,param)
             self.__db.commit()
@@ -100,25 +100,25 @@ class myMdb(object):
         # print('[insert_many executemany] Time Usage:',end-start)
 
     # 批量插入->返回影响的行数
-    def insertMap(jsonArray,tableName):
+    def insertMap(jsonArray, tableName):
         """批量插入,返回影响行数rowcount"""
         for json in jsonArray:#遍历每一个子json 下面是为每一个json拼接sql 并执行
             preSql = "insert into "+tableName+" ("  #前一段拼接字段
-            subSql ="values("                       #后一段拼接字段
-            exc = ()   #作为execute的参数值，这是一个tuble类型
-            for x in json:# 取出每一个子json的key和value值
-                preSql += x + "," #拼接前面sql的key值
-                subSql += "%s,"   #拼接后面sql的value数量
-                exc = exc + (json[x],)#每次 给exc添加新的值tuble，注意后面的“，”号不能少，否则不能识别为一个tuble
-            preSql = preSql[0:preSql.__len__()-1] + ")"#去掉后面的“，”再添加“）”
-            subSql = subSql[0:subSql.__len__()-1] + ")"#去掉后面的“，”再添加“）”
-            sql = preSql+subSql  #前后相加成一个完整的sql
+            subSql = "values("                       #后一段拼接字段
+            exc = ()   # 作为execute的参数值，这是一个tuble类型
+            for x in json:  # 取出每一个子json的key和value值
+                preSql += x + ","  # 拼接前面sql的key值
+                subSql += "%s,"   # 拼接后面sql的value数量
+                exc = exc + (json[x],)  # 每次 给exc添加新的值tuble，注意后面的“，”号不能少，否则不能识别为一个tuble
+            preSql = preSql[0:preSql.__len__()-1] + ")"  # 去掉后面的“，”再添加“）”
+            subSql = subSql[0:subSql.__len__()-1] + ")"  # 去掉后面的“，”再添加“）”
+            sql = preSql+subSql  # 前后相加成一个完整的sql
             # print(sql)
             # print(exc)
             try:
-                self.__cursor.execute(sql,exc) #将拼接好的sql和exc作为传入参数 执行
+                self.__cursor.execute(sql, exc)  # 将拼接好的sql和exc作为传入参数 执行
                 # self.__db.commit()
-                #影响的行数
+                # 影响的行数
                 rowcount = self.__cursor.rowcount
             except:
                 self.__db.rollback()
@@ -128,7 +128,7 @@ class myMdb(object):
     #测试代码见图片 模块名.insertMap(jsonArray, "students")
 
     #删->返回影响的行数
-    def delete(self,**kwargs):
+    def delete(self, **kwargs):
         table = kwargs['table']
         where = kwargs['where']
         sql = 'DELETE FROM %s where %s'%(table,where)
@@ -147,18 +147,18 @@ class myMdb(object):
             return rowcount
 
     #改->返回影响的行数
-    def update(self,**kwargs):
+    def update(self, **kwargs):
         flag = False
         table = kwargs['table']
         #del kwargs['table']
-        kwargs.pop('table')
+        kwargs.pop('table')  # 如果键值table在字典中存在，删除dict[table]，返回 dict[table]的value值。
 
         where = kwargs['where']
         kwargs.pop('where')
 
         sql = 'update %s set '%table
-        for k,v in kwargs.items():
-            sql += "`%s`='%s',"%(k,v)
+        for k, v in kwargs.items():  # 待研究'是否合理问题,是否需要去除.1月3日去除',待看后面是否出问题????
+            sql += "%s=%s,"%(k, v)
         sql = sql.rstrip(',')
         sql += ' where %s'%where
         print(sql)
@@ -180,7 +180,7 @@ class myMdb(object):
             # return flag
 
     #查->单条数据
-    def fetchone(self,**kwargs):
+    def fetchone(self, **kwargs):
         table = kwargs['table']
         #字段
         field = 'field' in kwargs and kwargs['field'] or '*'
@@ -202,7 +202,7 @@ class myMdb(object):
             return data
 
     #查->多条数据
-    def fetchall(self,**kwargs):
+    def fetchall(self, **kwargs):
         data = ""
         table = kwargs['table']
         #字段
