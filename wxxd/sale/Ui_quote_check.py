@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Administrator\Desktop\erp\wxxd\sale\quote_check.ui'
+# Form implementation generated from reading ui file 'c:\Users\Administrator\erp\wxxd\sale\quote_check.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -20,19 +20,19 @@ class Ui_Quote_check(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.Button_pass = QtWidgets.QPushButton(Quote_check)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../images/Accept_24px.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/png/images/Accept.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Button_pass.setIcon(icon)
         self.Button_pass.setObjectName("Button_pass")
         self.horizontalLayout.addWidget(self.Button_pass)
         self.Button_nopass = QtWidgets.QPushButton(Quote_check)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../images/stop_32px.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/png/images/stop_32px.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Button_nopass.setIcon(icon1)
         self.Button_nopass.setObjectName("Button_nopass")
         self.horizontalLayout.addWidget(self.Button_nopass)
         self.Button_edit = QtWidgets.QPushButton(Quote_check)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../images/modify_24px.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(":/png/images/modify_24px.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Button_edit.setIcon(icon2)
         self.Button_edit.setObjectName("Button_edit")
         self.horizontalLayout.addWidget(self.Button_edit)
@@ -45,7 +45,7 @@ class Ui_Quote_check(object):
         self.horizontalLayout.addWidget(self.Box_filter)
         self.Button_query = QtWidgets.QPushButton(Quote_check)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("../images/find_24px_28620.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(":/png/images/file_manager.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Button_query.setIcon(icon3)
         self.Button_query.setObjectName("Button_query")
         self.horizontalLayout.addWidget(self.Button_query)
@@ -141,7 +141,7 @@ class Ui_Quote_check(object):
         self.Button_edit.setToolTip(_translate("Quote_check", "修改报价"))
         self.Button_edit.setText(_translate("Quote_check", "修改"))
         self.Box_group.setToolTip(_translate("Quote_check", "分组"))
-        self.Box_filter.setToolTip(_translate("Quote_check", "筛选"))
+        self.Box_filter.setToolTip(_translate("Quote_check", "审核结果"))
         self.Button_query.setText(_translate("Quote_check", "查询"))
         self.Line_search.setToolTip(_translate("Quote_check", "搜索"))
         self.Line_search.setPlaceholderText(_translate("Quote_check", "搜索...."))
@@ -196,3 +196,4 @@ class Ui_Quote_check(object):
         item = self.Quote_detail.horizontalHeaderItem(16)
         item.setText(_translate("Quote_check", "备注"))
 
+import erp_rc

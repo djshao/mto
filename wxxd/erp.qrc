@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="png">
+    <file>images/resize_ver_32px.png</file>
+    <file>images/modify_24px.png</file>
+    <file>images/stop_32px.ico</file>
     <file>images/order.ico</file>
     <file>images/check.png</file>
     <file>images/Sales.png</file>

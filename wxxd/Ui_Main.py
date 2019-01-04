@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\Administrator\Desktop\erp\wxxd\Main.ui'
+# Form implementation generated from reading ui file 'c:\Users\Administrator\erp\wxxd\Main.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -199,6 +199,11 @@ class Ui_MainWindow(object):
         icon19.addPixmap(QtGui.QPixmap(":/png/images/print.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionprint.setIcon(icon19)
         self.actionprint.setObjectName("actionprint")
+        self.actiontiaojia = QtWidgets.QAction(MainWindow)
+        icon20 = QtGui.QIcon()
+        icon20.addPixmap(QtGui.QPixmap(":/png/images/resize_ver_32px.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actiontiaojia.setIcon(icon20)
+        self.actiontiaojia.setObjectName("actiontiaojia")
         self.menu_W.addAction(self.actiontile)
         self.menu_W.addAction(self.actioncascade)
         self.menu_H.addAction(self.actionabout)
@@ -207,8 +212,10 @@ class Ui_MainWindow(object):
         self.menu_F.addAction(self.SaveAction)
         self.menu_F.addAction(self.actionprint)
         self.menu_quote.addAction(self.action_quote)
-        self.menu_quote.addAction(self.action_order)
         self.menu_quote.addAction(self.action_quote_check)
+        self.menu_quote.addAction(self.actiontiaojia)
+        self.menu_quote.addSeparator()
+        self.menu_quote.addAction(self.action_order)
         self.menu_produce.addAction(self.action_plan)
         self.menu_produce.addAction(self.action_prepare)
         self.menu_produce.addAction(self.action_forging)
@@ -318,5 +325,6 @@ class Ui_MainWindow(object):
         self.action_home.setText(_translate("MainWindow", "首页"))
         self.action_quote_check.setText(_translate("MainWindow", "报价审核"))
         self.actionprint.setText(_translate("MainWindow", "打印"))
+        self.actiontiaojia.setText(_translate("MainWindow", "调价"))
 
 import erp_rc

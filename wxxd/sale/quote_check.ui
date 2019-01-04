@@ -40,8 +40,8 @@
         <string>通过</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../images/Accept_24px.ico</normaloff>../images/Accept_24px.ico</iconset>
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/Accept.png</normaloff>:/png/images/Accept.png</iconset>
        </property>
       </widget>
      </item>
@@ -54,8 +54,8 @@
         <string>未通过</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../images/stop_32px.ico</normaloff>../images/stop_32px.ico</iconset>
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/stop_32px.ico</normaloff>:/png/images/stop_32px.ico</iconset>
        </property>
       </widget>
      </item>
@@ -68,8 +68,8 @@
         <string>修改</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../images/modify_24px.png</normaloff>../images/modify_24px.png</iconset>
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/modify_24px.png</normaloff>:/png/images/modify_24px.png</iconset>
        </property>
       </widget>
      </item>
@@ -83,7 +83,7 @@
      <item>
       <widget class="QComboBox" name="Box_filter">
        <property name="toolTip">
-        <string>筛选</string>
+        <string>审核结果</string>
        </property>
        <property name="currentText">
         <string/>
@@ -96,8 +96,8 @@
         <string>查询</string>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>../images/find_24px_28620.png</normaloff>../images/find_24px_28620.png</iconset>
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/file_manager.png</normaloff>:/png/images/file_manager.png</iconset>
        </property>
       </widget>
      </item>
@@ -273,6 +273,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../erp.qrc"/>
+ </resources>
  <connections/>
 </ui>

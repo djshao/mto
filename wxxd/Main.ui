@@ -94,8 +94,10 @@
        <normaloff>:/png/images/quote.ico</normaloff>:/png/images/quote.ico</iconset>
      </property>
      <addaction name="action_quote"/>
-     <addaction name="action_order"/>
      <addaction name="action_quote_check"/>
+     <addaction name="actiontiaojia"/>
+     <addaction name="separator"/>
+     <addaction name="action_order"/>
     </widget>
     <widget class="QMenu" name="menu_produce">
      <property name="title">
@@ -462,6 +464,15 @@
    </property>
    <property name="text">
     <string>打印</string>
+   </property>
+  </action>
+  <action name="actiontiaojia">
+   <property name="icon">
+    <iconset resource="erp.qrc">
+     <normaloff>:/png/images/resize_ver_32px.png</normaloff>:/png/images/resize_ver_32px.png</iconset>
+   </property>
+   <property name="text">
+    <string>调价</string>
    </property>
   </action>
  </widget>

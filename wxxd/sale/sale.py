@@ -4,7 +4,7 @@
 """
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QColor, QBrush
+from PyQt5.QtGui import QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QObject, Qt, pyqtSlot, QDate, QDateTime
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel  # 数据库模型视图
@@ -251,7 +251,7 @@ class Quote(QWidget, Ui_Fquote):
     # 自动增加序号
     def autoadd(self):
         """序号自动编号"""
-        rows = self.TWquote.rowCount()                                    # 获取表格中的总行数
+        rows = self.TWquote.rowCount()  # 获取表格中的总行数
         for i in range(rows):
             xh = '%d'% (i+1)
             self.TWquote.setItem(i, 0, QTableWidgetItem(xh))
@@ -296,7 +296,7 @@ class Quote(QWidget, Ui_Fquote):
         #在末尾插入空行
         self.TWquote.setRowCount(rows + rownum)
 
-    # 清除所选的数据,待改进====================================???????
+    # 清除所选的数据,现在是连行都删除,考虑只清除数据的情况是否合适???????????
     def del_select(self):
         """清除数据"""
         ret = QMessageBox.warning(self.TWquote, u'警告', u'是否删除所选行?', QMessageBox.Yes|QMessageBox.No)
@@ -304,8 +304,8 @@ class Quote(QWidget, Ui_Fquote):
             for rg in self.TWquote.selectedRanges():
                 new_item = QTableWidgetItem("")
                 for i in range(rg.topRow(), rg.bottomRow()+1):
-                    print('top' +str(rg.topRow()))
-                    print(rg.bottomRow())
+                    # print('top' +str(rg.topRow()))
+                    # print(rg.bottomRow())
                     self.TWquote.setItem(i, 3, new_item)
 
     # 删除所选行
@@ -441,33 +441,26 @@ class Quote(QWidget, Ui_Fquote):
                     # print('newitem=' +input_table_items)
                     self.TWquote.setItem(i, j, newItem)  
         else:
-            self.centralWidget.show()   #  ==============?????????????
+            self.centralWidget.show()
         self.TWquote.resizeColumnsToContents()#根据内容自动调整所有列的列宽
 
 
-class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
+class QuoteExamine(QWidget, Ui_Quote_check):
     """报价审核类"""
     def __init__(self, parent=None):
         super(QuoteExamine, self).__init__(parent)
         self.setupUi(self)
         self.quote_list()
 
-        # item = QTableWidgetItem(str(temp_data))
-        # item.setFlags(NoItemFlags)
-        # self.Quote_list.setItem(i, j, item)
-
-        # self.Quote_detail.item(0, 11).setFlags(NoItemFlags)
-
         #连接槽
-        self.Quote_list.itemClicked.connect(self.query_detail)  # 点击报价目录,显示选择的报价明细
+        self.Quote_list.itemClicked.connect(self.query_detail)  # 点击报价清单,显示选择的报价明细
         self.Button_query.clicked.connect(self.query_list)    # 点击查询查报价清单
-        self.Quote_detail.itemClicked.connect(self.outSelect)
-        # self.Quote_detail.cellChanged.connect(self.detail_cellChanged)
+        self.Quote_detail.itemClicked.connect(self.outSelect)  # 报价明细区点击事件,记录前值
+        self.Box_filter.currentIndexChanged.connect(self.Box_filter_currentIndexChanged)  # 报价明细区单元格变更事件
 
     def quote_list(self):  # 默认显示报价清单
         """审核报价清单"""
-        data = myMdb().fetchall(table='报价基本信息', where="状态!='已审核'")
-        # col_lst = [tup[0] for tup in cur.description]  # 数据列字段名 tup:数组 #description:种类
+        data = myMdb().fetchall(table='报价基本信息', where="状态='待审核'")
         row = len(data)     # 获得data的行数
         vol = len(data[0])  # 获得data的列数.cur.description或len(data[0]) 
         # 插入表格
@@ -475,14 +468,8 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.Quote_list.setRowCount(row)
         font = QtGui.QFont('微软雅黑', 9)
         self.Quote_list.horizontalHeader().setFont(font)      # 设置行表头字体
-        # self.Quote_list.setHorizontalHeaderLabels(col_lst)    # 设置标题
         self.Quote_list.verticalHeader().setVisible(False)    # 左垂直表头不显示
-        # 加单元格下拉列表框
-        comBox = QComboBox()
-        comBox.addItems(['审核通过', '退回重报'])
-        # comBox.setStyleSheet('QComboBox{margin:3px}')
-        self.Quote_list.setCellWidget(0, 6, comBox)
-        #self.comboBox.currentText() == "作者"  下拉列表框的文本
+        self.Quote_list.setSelectionMode(QAbstractItemView.SingleSelection)  #只能选择单行
 
         # 设置表格颜色             
         self.Quote_list.horizontalHeader().setStyleSheet('QHeaderView::section{background:skyblue}')
@@ -503,6 +490,8 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         self.Quote_list.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
         splitter.addWidget(self.Quote_list)
         self.verticalLayout.addWidget(splitter)
+
+        # 明细区域========================================
         font = QtGui.QFont('微软雅黑', 9)
         self.Quote_detail.horizontalHeader().setFont(font)         # 设置行表头字体
         # self.Quote_detail.setHorizontalHeaderLabels(col_lst_3)     # 设置标题
@@ -512,24 +501,29 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
             'QHeaderView::section{background:skyblue}')
         self.Quote_detail.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
         self.Quote_detail.resizeColumnsToContents()                # 自适应宽度
-        self.Quote_list.resizeRowsToContents()
         # self.Quote_detail.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
         self.Quote_detail.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
         # splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         splitter.addWidget(self.Quote_detail)
         self.verticalLayout.addWidget(splitter)
-        # self.setLayout(self.verticalLayout)                      # 加这行后查询后可以更新,不用再addwidget,待搞明白?
+        # self.setLayout(self.verticalLayout)           # 设置布局 加这行后查询后可以更新,不用再addwidget,待搞明白?
 
     def query_list(self):  # 查询报价清单
+        """查询报价清单"""
         self.Quote_list.clearContents                    # clearContents清除内容,clear清空表格中所有内容（包含表头）
         lsearch = self.Line_search.text()                    # 搜索框
         # sql = "SELECT * FROM 报价基本信息 WHERE 公司名称 LIKE '%"+lsearch+"%'"   #'%"+bjdh+"%'"
         if lsearch == "":
-            data_2 = myMdb().fetchall(table='报价基本信息', where="状态!='已审核'")
+            data_2 = myMdb().fetchall(table='报价基本信息', where="状态='待审核'")
         else:
             data_2 = myMdb().fetchall(
                 table='报价基本信息',
-                where="公司名称="+"'"+lsearch+"'" + "and 状态!='已审核'")
+                where="公司名称 like '%"+lsearch+"%'" + " and 状态='待审核'")
+                # where="公司名称="+"'"+lsearch+"'" + "and 状态!='审核通过'")
+        # print(data_2)
+        if not data_2:
+            QMessageBox.warning(self, '查询出错', '没有查到报价记录')
+            return
         # col_lst_2 = [tup[0] for tup in curr.description]
         # print(data_2)
         row_2 = len(data_2)                                 #获得data的行数
@@ -545,21 +539,15 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         """查询报价明细"""
         # 暂停事件信号
         self.Quote_detail.blockSignals(True)
-        # self.Quote_detail.cellChanged.disconnect(self.on_Quote_detail_cellChanged)
+        # 设置下拉列表框
+        self.add_combobox()
         h = self.Quote_list.currentIndex().row()       # 找到所选行的行数h
         bjdh = self.Quote_list.item(h, 1).text()       # 找到所选h行的第2列报价单号
         self.Quote_detail.clearContents()  # 清除报价明细表内数据
-        # sql = "SELECT * FROM 报价明细 WHERE 报价单号 LIKE '%"+bjdh+"%'"   #'%"+bjdh+"%'"
-        # 数据库模型视图法-过滤报价单号
-        # query_no = "报价单号 = '{}'".format(bjdh)
-        # self.tablemodel.setFilter(query_no)
-        
         data_3 = myMdb().fetchall(table='quote', where="报价单号=" +bjdh)
-        # col_lst_3 = [tup[0] for tup in cur_3.description]
         row_3 = len(data_3)                            # 获得data的行数
         vol_3 = len(data_3[0])                         # 获得data的列数.cur.description len(data[0])
         self.Quote_detail.setRowCount(row_3)
-        # self.Quote_detail.setColumnCount(0)
         #构建表格插入数据
         for i in range(row_3):                                     # i到row-1的数量
             for j in range(vol_3):
@@ -575,6 +563,29 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         # 启用事件信号
         self.Quote_detail.blockSignals(False)
 
+    def quote_list_select(self):
+        """报价清单点击显示列表框事件,有全屏退出问题"""
+        # 尝试删除列表框,用于再次点击事件
+        # try:
+        #     self.comBox.deleteLater()
+        # except:
+        #     pass
+        # finally:
+        #     # 加单元格下拉列表框
+        #     self.comBox = QComboBox()
+        #     self.comBox.addItem('请选择审核结果')
+        #     # 设置字体颜色
+        #     self.comBox.setStyleSheet("QComboBox{color:red;}")
+        #     self.comBox.addItem(QIcon(":/png/images/Accept.png"),'审核通过')
+        #     self.comBox.addItem(QIcon(":/png/images/stop_32px.ico"),'退回重报')
+        #     h = self.Quote_list.currentItem().row()
+        #     self.Quote_list.setCellWidget(h, 6, self.comBox)
+
+            # self.verticalLayout.addWidget(self.comBox)
+            # self.setLayout(self.verticalLayout)
+            # 列表框点击事件
+            # self.comBox.currentIndexChanged.connect(self.combox_changed)
+
     # 单击一个单元格，即可获得其中的字符
     def outSelect(self, Item=None):
         """单击一个单元格，即可获得其中的字符"""
@@ -584,13 +595,14 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         global table_value
         table_value = Item.text()
 
-    # 当单元格中的数据发生变化时，设置颜色打印变更值====需增加忽悠与价格无关的变更事件
+    # 修改报价明细区域单元格后，设置颜色打印变更值
     @pyqtSlot(int, int)
     def on_Quote_detail_cellChanged(self, row, col):
+        """报价明细修改后的变更事件-->写入变更记录"""
         # if item == None:
         #     return
-        if col == 11:
-            return
+        # if col == 11:
+        #     return
         item = self.Quote_detail.item(row, col)
         txt = item.text()
         self.Quote_detail.blockSignals(True)  # 暂停单元格修改信号
@@ -599,9 +611,8 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         # 背景颜色（红色）
         self.Quote_detail.item(row, col).setBackground(QBrush(QColor(255, 0, 0)))
         self.Quote_detail.blockSignals(False)  # 启动单元格修改信号
-        # 报价单号
+        # 报价单号/序号
         bjdh = self.Quote_detail.item(row, 1).text()
-        # 序号
         xh = self.Quote_detail.item(row, 2).text()
         # 屏幕左下状态栏显示提示信息??????????????????????
         # self.statusBar().showMessage('序号%s数据改变为:%s'%(txt, xh)) 
@@ -609,27 +620,23 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
         lie = self.Quote_detail.horizontalHeaderItem(col).text()
         record = '%s:%s修改为%s,'%(lie, table_value, txt)
         xgjl = 'concat(修改记录,'+"'"+record+"'"+')'
-        # 更新-数据库修改记录
-        myMdb().update(table='quote', where="报价单号="+bjdh+ " and 序号="+xh, 修改记录=xgjl)
-
-        # sql原始拼接法
-        # db = pymysql.connect(
-        #   host='127.0.0.1', port=3308, user='root', password='root', db='mrp',charset='utf8',)
-        # cur = db.cursor()
-        # sql = 'update quote set 修改记录=concat(修改记录,'
-        # sql += "'"+record+"'"+') where 报价单号='
-        # sql += bjdh+' and 序号='+xh
-        # cur.execute(sql)
-        # db.commit()
-        # print(xgjl)
-
         # 重新计算汇总
         self.Quote_detail_calculate(row)
+        # 更新-数据库-->
+        myMdb().update(table='quote',
+                        数量=self.Quote_detail.item(row, 7).text(),
+                        单价=self.Quote_detail.item(row, 10).text(),
+                        总价=self.Quote_detail.item(row, 11).text(),
+                        单重=self.Quote_detail.item(row, 12).text(),
+                        公斤价=self.Quote_detail.item(row, 13).text(),
+                        加工费=self.Quote_detail.item(row, 14).text(),
+                        其他费用=self.Quote_detail.item(row, 15).text(),
+                        修改记录=xgjl,
+                        where="报价单号="+bjdh+ " and 序号="+xh)
         # 汇总总数量/总价,更新到数据库表中
         count_1 = self.sum_amount_1(7).quantize(Decimal('0'))
         count_2 = self.sum_amount_1(11).quantize(Decimal('0'))
         myMdb().update(table='报价基本信息', 总数量=count_1, 总价=count_2, where="报价单号="+bjdh)
-        # print(record)
 
     def Quote_detail_calculate(self, row):
         """修改后重新计算单价/总价"""
@@ -656,8 +663,10 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
             expenses = 0
         else:
             expenses = Decimal(str(self.Quote_detail.item(row, 15).text()))
-        # 计算单价    公斤价=""时直接用单价
-        if self.Quote_detail.item(row, 13).text() == "":
+        # 计算单价    公斤价="0.00或0时直接用单价,需要转化字符类型再==
+        if float(self.Quote_detail.item(row, 13).text()) == float(0.00):
+            price = Decimal(str(self.Quote_detail.item(row, 10).text()))
+        elif float(self.Quote_detail.item(row, 13).text()) == float(0):
             price = Decimal(str(self.Quote_detail.item(row, 10).text()))
         else:
             # 单价=单重*公斤价+加工费+其他费用
@@ -685,13 +694,35 @@ class QuoteExamine(QWidget, Ui_Quote_check):  # 报价审核
                 count += Decimal(self.Quote_detail.item(i, l).text())
         return count
 
-    @pyqtSlot()  # 报价审核通过
-    def on_Button_pass_clicked(self):
+    def add_combobox(self):
+        """设置下拉列表框控件参数"""
+        if self.Box_filter.count() > 0:
+            return
+        self.Box_filter.addItem('请选择审核结果')
+        # 设置字体颜色+图标
+        self.Box_filter.setStyleSheet("QComboBox{color:red;}")
+        self.Box_filter.addItem(QIcon(":/png/images/Accept.png"), '审核通过')
+        self.Box_filter.addItem(QIcon(":/png/images/stop_32px.ico"), '退回重报')
+
+    # @pyqtSlot()  # 报价审核通过
+    def Box_filter_currentIndexChanged(self):
+        """列表框选择变更事件-->更新数据库审核状态"""
+        if self.Box_filter.currentText() == '请选择审核结果':
+            return
+        if self.Box_filter.currentText() == '':
+            return
         h = self.Quote_list.currentIndex().row()          # 找到所选行的行数h
         bjdh = self.Quote_list.item(h, 1).text()          # 找到所选h行的1位报价单号
-        # cur_4.execute("UPDATE 报价基本信息 SET 状态='通过' WHERE 报价单号 = '"+bjdh+"'")
-        myMdb().update(table='报价基本信息', 状态='已审核', where="报价单号="+bjdh)
-        QMessageBox.information(QWidget(), "报价审核", "审核成功")
-        self.Quote_list.clearContents()
-        self.Quote_detail.clearContents()
-        self.querylist()
+        zt = self.Box_filter.currentText()
+        button = QMessageBox.question(self,"提醒","将要保存审核状态为:"+zt+"？",
+                                      QMessageBox.Ok|QMessageBox.Cancel,QMessageBox.Ok)
+        if button == QMessageBox.Ok:
+            myMdb().update(table='报价基本信息', 状态="'"+zt+"'", where="报价单号="+bjdh)
+            QMessageBox.information(QWidget(), "报价审核", "审核结果:"+zt)
+            self.Box_filter.blockSignals(True)
+            # 防止再次选择下拉框引起再次写状态,要清空
+            self.Box_filter.clear()
+            self.Box_filter.blockSignals(False)
+            self.query_list()
+        else:
+            return

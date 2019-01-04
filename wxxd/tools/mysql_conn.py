@@ -161,7 +161,7 @@ class myMdb(object):
             sql += "%s=%s,"%(k, v)
         sql = sql.rstrip(',')
         sql += ' where %s'%where
-        print(sql)
+        # print(sql)
         try:
             # 执行SQL语句
             self.__cursor.execute(sql)
@@ -213,7 +213,7 @@ class myMdb(object):
         order = 'order' in kwargs and 'order by '+ kwargs['order'] or ''
         #limit
         limit = 'limit' in kwargs and 'limit '+ kwargs['limit'] or ''
-        sql = 'select %s from %s %s %s %s'%(field,table,where,order,limit)
+        sql = 'select %s from %s %s %s %s'%(field, table, where, order, limit)
         # print(sql)
         try:
             # 执行SQL语句
