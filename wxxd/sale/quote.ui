@@ -346,6 +346,11 @@
        <string>备注</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>折扣%</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item row="2" column="0">

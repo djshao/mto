@@ -22,13 +22,13 @@ from Ui_查询 import Ui_Query_Form
 from 查询 import *
 from Ui_首页 import Ui_First_Form
 from sale.sale import Quote, QuoteExamine, Order
-# from sell.Ui_offer import Ui_offer_Form
+# from produce.produce import *
 
 class Ui_ERP(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(Ui_ERP,self).__init__(parent)
+        super(Ui_ERP, self).__init__(parent)
         self.setupUi(self)
-        self.setCentralWidget(FirstForm())
+        self.setCentralWidget(Order())
 
         self.statusBar().showMessage('准备就绪') # 屏幕左下状态栏显示提示信息
 
@@ -48,11 +48,9 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
     def on_action_quote_check_triggered(self): # 工作-->销售-->报价审核
         self.setCentralWidget(QuoteExamine())
 
-    @pyqtSlot()   
+    @pyqtSlot()
     def on_actionscjd_triggered(self): # 工作-->查询-->生产进度
-        """
-        查询生产进度 修改中间窗口为多文档界面显示
-        """
+        """工作-->查询-->生产进度 中间窗口显示多文档界面用法"""
         # print("key=%s ,value=%s" % (item.text(0), item.text(1)))
         self.mdi = QMdiArea()                                 #多文档界面
         self.setCentralWidget(self.mdi)                       #创建中央控件多文档界面要self.mdi
@@ -73,18 +71,33 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
         self.mdi.tileSubWindows() # 平铺窗口
 
     @pyqtSlot()
-    def on_NewAction_triggered(self): # 查看弹出新建对话框
+    def on_NewAction_triggered(self):
+        """文件-->新建 or 点击任务栏新建"""
         dialog = Query_Form()
         dialog.setWindowTitle("查询")
         dialog.setWindowModality(Qt.ApplicationModal)
         dialog.exec_()
 
     @pyqtSlot()
-    def on_OpenAction_triggered(self): # 文件-->打开
+    def on_OpenAction_triggered(self):
+        """文件-->打开 or 点击任务栏"""
         file, ok = QFileDialog.getOpenFileName(
-            self, "打开", "C:/Users/Administrator/Desktop/Python/学习相关/", "All Files (*);;Text Files (*.txt)") 
+            self, "打开", "C:/Users/Administrator/Desktop/Python/学习相关/", 
+            "All Files (*);;Text Files (*.txt)")
         # 在状态栏显示文件地址  		
-        self.statusbar.showMessage(file) 
+        self.statusbar.showMessage(file)
+
+    @pyqtSlot()
+    def on_SaveAction_triggered(self):
+        """文件-->保存 or 点击任务栏保存"""
+        if self.findChild(QTableWidget, "TW_order"):
+            # Order().on_PBsave_clicked()  # 运行后还不会找到中心控件,要从中心控件入手??????????????????
+            if self.centralWidget().lineEdit_3.text() == "":
+                QMessageBox.about(self, "注意", "数据不能为空,返回修改!")
+                return
+            print(self.centralWidget().lineEdit_4.text())
+        if self.findChild(QTableWidget, "TWquote"):
+            Quote().on_PBsave_clicked()
 
 
 class QueryForm(QWidget, Ui_Query_Form): # 工作-->查询

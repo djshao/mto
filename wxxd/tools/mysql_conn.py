@@ -10,14 +10,14 @@ import hashlib
 import time
 
 
-def connectDB():
-    """ db = pymysql.connect(host='127.0.0.1', port=3308, user='root', password='root', db='mrp',charset='utf8',)"""
-    db = QSqlDatabase.addDatabase('QMYSQL')
-    db.setDatabaseName('mrp')
-    db.setHostName('localhost')
-    db.setUserName('root')
-    db.setPassword('root')
-    db.setPort(3308)
+# def connectDB():
+#     """ db = pymysql.connect(host='127.0.0.1', port=3308, user='root', password='root', db='mrp',charset='utf8',)"""
+#     db = QSqlDatabase.addDatabase('QMYSQL')
+#     db.setDatabaseName('mrp')
+#     db.setHostName('localhost')
+#     db.setUserName('root')
+#     db.setPassword('root')
+#     db.setPort(3308)
 
 
 class myMdb(object):
@@ -42,7 +42,7 @@ class myMdb(object):
             charset = 'charset' in kwargs and kwargs['charset'] or 'utf8'
             # 打开数据库连接  
             # print('连接数据库')
-            self.__db = mdb.connect(host=host,port=int(port),user=user,passwd=passwd,db=db,charset=charset)
+            self.__db = mdb.connect(host=host, port=int(port), user=user, passwd=passwd, db=db, charset=charset)
             #创建一个游标对象 cursor
             self.__cursor = self.__db.cursor()
             # self.__cursor = self.__db.cursor(cursor=mdb.cursors.DictCursor) # 游标类型为字典类型
@@ -81,9 +81,9 @@ class myMdb(object):
 
     def insert_many(self, sql, param): # 批量插入executemany
         """executemany批量插入数据库"""
-        a = "ON DUPLICATE KEY UPDATE"  # 自动判断是否有记录,待研究??????
+        # a = "ON DUPLICATE KEY UPDATE"  # 自动判断是否有记录,待研究??????
         try:
-            self.__cursor.executemany(sql,param)
+            self.__cursor.executemany(sql, param)
             self.__db.commit()
             rowcount = self.__cursor.rowcount
         except Exception as e:

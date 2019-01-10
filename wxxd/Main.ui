@@ -80,6 +80,8 @@
     <addaction name="OpenAction"/>
     <addaction name="SaveAction"/>
     <addaction name="actionprint"/>
+    <addaction name="QueryAction"/>
+    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menu_K">
     <property name="title">
@@ -229,8 +231,10 @@
    <addaction name="separator"/>
    <addaction name="NewAction"/>
    <addaction name="OpenAction"/>
+   <addaction name="QueryAction"/>
    <addaction name="SaveAction"/>
    <addaction name="actionprint"/>
+   <addaction name="action_2"/>
   </widget>
   <action name="NewAction">
    <property name="icon">
@@ -473,6 +477,24 @@
    </property>
    <property name="text">
     <string>调价</string>
+   </property>
+  </action>
+  <action name="QueryAction">
+   <property name="icon">
+    <iconset resource="erp.qrc">
+     <normaloff>:/png/images/file_manager.png</normaloff>:/png/images/file_manager.png</iconset>
+   </property>
+   <property name="text">
+    <string>查询</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="icon">
+    <iconset resource="erp.qrc">
+     <normaloff>:/png/images/export.png</normaloff>:/png/images/export.png</iconset>
+   </property>
+   <property name="text">
+    <string>导出</string>
    </property>
   </action>
  </widget>

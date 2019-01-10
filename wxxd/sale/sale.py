@@ -21,46 +21,307 @@ import time
 from sale.Ui_quote_check import Ui_Quote_check
 from sale.Ui_quote import Ui_Fquote
 from sale.Ui_offer import Ui_offer_Form
+from sale.Ui_order import Ui_WidgetOrder
 
-from tools.mysql_conn import myMdb, connectDB
+from tools.mysql_conn import myMdb
+from tools.tools import *
 # from lib.RMB import * #人民币大写转换
+# sys.path.append("..")  # 调用上级目录
+# from Ui_Main import Ui_MainWindow
 
-
-
-class Order(QWidget, Ui_offer_Form): # 订单
+class Order(QWidget, Ui_WidgetOrder):
+    """订单模块"""
     def __init__(self, parent=None):
         super(Order, self).__init__(parent)
         self.setupUi(self)
-        self.offer()
+        self.open_order()
 
-    def offer(self): # 订单
+        self.comboBox.addItem('请选择销售代表')
+        self.comboBox.setStyleSheet("QComboBox{color:red;}")
+        self.comboBox.addItem(QIcon(":/png/images/Accept.png"), '吴丹')
+        self.comboBox.addItem(QIcon(":/png/images/Accept.png"), '费舟亮')
+        # self.SaveAction.triggered.connect(self.on_SaveAction_triggered)    # 点击查询查报价清单
+        self.comboBox.currentIndexChanged.connect(self.sum_amount_1)
+
+    # 保存订单
+    @pyqtSlot()
+    def on_PBsave_clicked(self):
+        """保存合同和订单明细"""
+        if self.lineEdit_3.text() == "" or self.lineEdit_4.text() == "" or \
+           self.comboBox.currentText() == "请选择销售代表":
+            QMessageBox.about(self, "注意", "数据不能为空,返回修改!")
+            return
+        button = QMessageBox.question(self, "注意", "将要保存订单,确定无误按OK继续,按Cancel退出",
+                                      QMessageBox.Ok|QMessageBox.Cancel, QMessageBox.Ok)
+        if button == QMessageBox.Cancel:
+            return
+        # 保存订单明细
+        rows = self.TW_order.rowCount()  # 总行数
+        cols = self.TW_order.columnCount()  # 总列数
+        for row in range(rows+1):
+            if not self.TW_order.item(row, 0):  # 从0行开始找出空值所在行
+                break # 跳出循环
+            elif self.TW_order.item(row, 0).text() == "":  #从0行开始找出空值所在行
+                break
+        filed = '生产编号,合同编号,买方,序号,名称,制造标准,规格型号,材质,数量,工作令号,件号,单价,小计,单重,交货期,备注,材料编码'
+        preSql = "insert into order_list ("+filed+")"
+        subSql = "values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = preSql+subSql  # 前后相加成一个完整的sql
+        param = []  # 建传入值的列表
+        for k in range(row +1):
+            value_list = []
+            value_list.append(self.lineEdit_3.text())  # 生产编号加入数组
+            value_list.append(self.lineEdit_4.text())  # 合同编号
+            value_list.append(self.lineEdit_2.text())  # 买方
+            for i in range(cols):
+                # 把None和空值的数字格设为0值
+                if not self.TW_order.item(k, i):
+                    value_list.append("0")
+                elif self.TW_order.item(k, i).text() == "":
+                    value_list.append("0")
+                else:
+                    value_list.append(self.TW_order.item(k, i).text())
+            param.append(value_list)
+        rowcount = myMdb().insert_many(sql, param)
+        # 保存订单汇总==============================================================
+        myMdb().insert(
+                        table='orders',
+                        买方=self.lineEdit_2.text(),
+                        生产编号=self.lineEdit_3.text(),
+                        合同编号=self.lineEdit_4.text(),
+                        签订日期=self.lineEdit_5.text(),
+                        总数量=self.lineEdit_6.text(),
+                        总金额=self.lineEdit_7.text(),
+                        销售代表=self.comboBox.currentText(),
+                        交货地点=self.lineEdit.text())
+        QMessageBox.about(self, "保存成功", "保存了"+str(rowcount)+"条订单记录")
+
+    def open_order(self):
+        """打开订单-->初始化订单表格"""
+        #设置表格设置初始500行
+        self.TW_order.setRowCount(500)
+        # 设置标题
+        # self.TWquote.setHorizontalHeaderLabels(input_table_header)
+        # 设置每格为空值
+        for i in range(500):
+            for j in range(14):
+                new_item = QTableWidgetItem("")
+                new_item.setTextAlignment(Qt.AlignHCenter|Qt.AlignVCenter)
+                self.TW_order.setItem(i, j, new_item)
+        # 设置行表头字体
+        font = QtGui.QFont('微软雅黑', 9)
+        self.TW_order.horizontalHeader().setFont(font)
+        # 左垂直表头不显示
+        self.TW_order.verticalHeader().setVisible(False)
+        # 只能选择单行
+        self.TW_order.setSelectionMode(QAbstractItemView.SingleSelection)
+        # 设置表格颜色             
+        self.TW_order.horizontalHeader().setStyleSheet('QHeaderView::section{background:skyblue}')
+        self.TW_order.setFrameStyle(QtWidgets.QFrame.Box | QtWidgets.QFrame.Plain)
+        # 设置订单lneedit文本框显示当前日期
+        self.lineEdit_5.setText(time.strftime("%Y-%m-%d", time.localtime()))
+        # 设置文本框无边框
+        styleSheet = "background:transparent;border-width:0;border-style:outset"
+        self.lineEdit_1.setStyleSheet(styleSheet)
+        self.lineEdit_2.setStyleSheet(styleSheet)
+        self.lineEdit_3.setStyleSheet(styleSheet)
+        self.lineEdit_4.setStyleSheet(styleSheet)
+        self.lineEdit_5.setStyleSheet(styleSheet)
+        self.lineEdit_6.setStyleSheet(styleSheet)
+
+    #点击查询按钮事件
+    @pyqtSlot()
+    def on_PBquery_clicked(self):
+        """查询报价单-->生成生产合同明细"""
+        bjdh = self.Line_search.text()
+        if bjdh == "":
+            data = myMdb().fetchall(table='quote')
+        else:
+            data = myMdb().fetchall(table='quote', where='报价单号='+bjdh)
+        if len(data) == 0:
+            QMessageBox.warning(self, '查询出错', '没有查到报价记录')
+            return
+        row = len(data)
+        vol = len(data[0])
+        # 构建表格插入数据
+        self.lineEdit_2.setText(str(data[0][0]))
+        for i in range(row):
+            for j in range(1, vol-5):
+                temp_data = data[i][j]
+                data1 = QTableWidgetItem(str(temp_data))
+                self.TW_order.setItem(i, j-2, data1)
+        self.TW_order.resizeColumnsToContents()             # 自适应宽度
+        self.TW_order.resizeRowsToContents()                  # 自适应行高
+        self.TW_order.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
+        count_1 = self.sum_order(5)
+        self.lineEdit_6.setText(str(count_1.quantize(Decimal('0'))))   # 添加计算结果到总数量栏,0位小数
+        count_2 = self.sum_order(9)
+        self.lineEdit_7.setText(str(count_2.quantize(Decimal('0.00'))))    # 添加计算结果到总价栏,2位小数
+        # print(count_2)
+
+    # 计算列值总数函数
+    def sum_order(self, l):
+        """计算所选列的总数,l为列数"""
+        count = 0
+        # 获取表格中的总行数,考虑到保存时有空行的情况用总行数.
+        rows = self.TW_order.rowCount()
+        for i in range(rows):
+            # 判断不存在和空值,并设为0值
+            if not self.TW_order.item(i, l):
+                count += 0
+            elif self.TW_order.item(i, l).text() == "":
+                count += 0
+            else:
+                count += Decimal(self.TW_order.item(i, l).text())
+        return count
+
+    # 右键菜单
+    def contextMenuEvent(self, event):
+        """系统自带右键菜单事件:"""
+        pmenu = QMenu(self)
+        insertAct = QAction(u"插入行", self.TW_order)
+        # deleteAct = QAction(u"删除行", self.TWquote)
+        pmenu.addAction(insertAct)
+        # pmenu.addAction(deleteAct)
+        pmenu.popup(QtGui.QCursor.pos())  #在鼠标光标位置显示pmenu.popup(self.mapToGlobal(event.pos()))
+        insertAct.triggered.connect(self.add_onerow)
+        # deleteAct.triggered.connect(self.ondelselect)
+
+    def add_onerow(self):
+        """当前位置插入一行"""
+        r = self.TWquote.currentIndex().row()
+        # 在r位置插入一空行
+        self.TW_order.insertRow(r)
+        # 给插入的行设置空值
+        for j in range(15):
+            newItem = QTableWidgetItem(0)
+            newItem.setTextAlignment(Qt.AlignHCenter|Qt.AlignVCenter)
+            self.TW_order.setItem(r, j, newItem)
+
+    # @pyqtSlot()
+    def comboBox_currentIndexChanged(self):
+        """列表框变色"""
+        if self.comboBox.currentText() != "请选择销售代表":
+            self.comboBox.setStyleSheet("QComboBox{color:black;}")
+        else:
+            self.comboBox.setStyleSheet("QComboBox{color:red;}")
+
+    # 修改订单明细后，设置颜色
+    @pyqtSlot(int, int)
+    def on_Quote_detail_cellChanged(self, row, col):
+        """订单明细修改变更事件-->重新计算数量价格"""
+        item = self.TW_order.item(row, col)
+        txt = item.text()
+        self.TW_order.blockSignals(True)  # 暂停单元格修改信号
+        # 字体颜色（红色）
+        # item.setForeground(QBrush(QColor(255, 0, 0)))
+        # 背景颜色（红色）
+        self.TW_order.item(row, col).setBackground(QBrush(QColor(255, 0, 0)))
+        self.TW_order.blockSignals(False)  # 启动单元格修改信号
+        # 报价单号/序号
+        bjdh = self.TW_order.item(row, 1).text()
+        xh = self.TW_order.item(row, 2).text()
+        # 屏幕左下状态栏显示提示信息??????????????????????
+        # self.statusBar().showMessage('序号%s数据改变为:%s'%(txt, xh)) 
+        # 被修改单元格的列标题
+        lie = self.TW_order.horizontalHeaderItem(col).text()
+        record = '%s:%s修改为%s,'%(lie, table_value, txt)
+        xgjl = 'concat(修改记录,'+"'"+record+"'"+')'
+        # 重新计算汇总
+        self.order_detail_calculate(row)
+        # 汇总总数量/总价,更新到数据库表中
+        count_1 = self.sum_amount_1(7).quantize(Decimal('0'))
+        count_2 = self.sum_amount_1(11).quantize(Decimal('0'))
+
+    def order_detail_calculate(self, row):
+        """修改后重新计算单价/总价"""
+        self.TW_order.blockSignals(True)  # 暂停单元格修改信号
+        # 数量quantity
+        quantity = int(self.TW_order.item(row, 7).text())
+        # 单重unit weight                  
+        if self.TW_order.item(row, 12).text() == "":
+            weight = 0
+        else:
+            weight = Decimal(str(self.TW_order.item(row, 12).text()))
+        # 公斤价weight price
+        if self.TW_order.item(row, 13).text() == "":
+            weight_price = 0
+        else:
+            weight_price = Decimal(str(self.TW_order.item(row, 13).text()))
+        # 加工费cost
+        if self.TW_order.item(row, 14).text() == "":
+            cost = 0
+        else:
+            cost = Decimal(str(self.TW_order.item(row, 14).text()))
+        # 其他费用expenses
+        if self.TW_order.item(row, 15).text() == "":
+            expenses = 0
+        else:
+            expenses = Decimal(str(self.TW_order.item(row, 15).text()))
+        # 计算单价    公斤价="0.00或0时直接用单价,需要转化字符类型再==
+        if float(self.TW_order.item(row, 13).text()) == float(0.00):
+            price = Decimal(str(self.TW_order.item(row, 10).text()))
+        elif float(self.TW_order.item(row, 13).text()) == float(0):
+            price = Decimal(str(self.TW_order.item(row, 10).text()))
+        else:
+            # 单价=单重*公斤价+加工费+其他费用
+            price = weight*weight_price+cost+expenses
+        # 更新单价,小数点2位
+        self.TW_order.setItem(row, 10, QTableWidgetItem(str('%.2f' % price)))
+        # 更新总价amount=数量*单价
+        amount = Decimal(quantity*price)
+        self.TW_order.setItem(row, 11, QTableWidgetItem(str('%.2f' % amount))) 
+        self.TW_order.blockSignals(False)  # 恢复单元格修改信号
+
+    # 计算列值总数函数
+    def sum_amount_1(self, l):
+        """计算所选列的总数,l为列数"""
+        count = 0
+        # 获取表格中的总行数,考虑到保存时有空行的情况用总行数.
+        name = "TW_order"
+        eval_list = "self."+name+".rowCount()"
+        rows = eval(eval_list)
+        print(rows)
+        for i in range(rows):
+            # 判断不存在和空值,并设为0值
+            items = "self."+name+".item("+str(i)+','+str(l)+')'
+            if not eval(items):
+            # if not self.TW_order.item(i, l):
+                count += 0
+            elif self.TW_order.item(i, l).text() == "":
+                count += 0
+            else:
+                count += Decimal(eval(items).text())
+        return count
+
+    def offer(self): # pandas
         # self.offerwidget = DataTableWidget()
-        widget = self.offerwidget
-        widget.resize(600, 500) # 如果对部件尺寸大小不满意可以在这里设置
+        # widget = self.offerwidget
+        # widget.resize(600, 500) # 如果对部件尺寸大小不满意可以在这里设置
 
-        self.model = DataFrameModel() # 设置新的模型
-        widget.setViewModel(self.model)
+        # self.model = DataFrameModel() # 设置新的模型
+        # widget.setViewModel(self.model)
 
-        #测试插入时间
-        start = time.clock()
-        # MySQL法连接数据库,读取数据需要转换
-        conn = pymysql.connect(host='localhost', port=3308,user='root',password='root',db='mrp',charset='utf8')
-        sql = 'select * from scjdb'
-        self.df = pd.read_sql(sql, con=conn)
+        # #测试插入时间
+        # start = time.clock()
+        # # MySQL法连接数据库,读取数据需要转换
+        # conn = pymysql.connect(host='localhost', port=3308,user='root',password='root',db='mrp',charset='utf8')
+        # sql = 'select * from PP'
+        # self.df = pd.read_sql(sql, con=conn)
 
         # 通过SQLAlchemy法.create_engine建立连接引擎,可以直接创建dataframe
-        engine = create_engine('mysql+pymysql://root:root@localhost:3308/mrp')
-        sql = 'select * from scjdb'
-        self.df = pd.read_sql(sql, engine)
+        # engine = create_engine('mysql+pymysql://root:root@localhost:3308/mrp')
+        # sql = 'select * from PP'
+        # self.df = pd.read_sql(sql, engine)
         # self.df.to_sql(name='user',con=engine,if_exists='append',index=False)  写入数据库
         # df.to_sql(目标表名,con=engine, schema=数据库名, index=False, index_label=False, if_exists='append', chunksize=1000)
         # pd.io.sql.to_sql(df,table_name,con=conn,schema='w_analysis',if_exists='append') 两个语句???
 
         # self.df = pd.read_excel(r'C:/Users/Administrator/Desktop/报价模板.xlsx',encoding='utf-8')
         # self.df_original = self.df.copy() # 备份原始数据
-        self.model.setDataFrame(self.df)
-        end = time.clock()
-        print('[insert_many executemany] Time Usage:',end-start)
+        # self.model.setDataFrame(self.df)
+        # end = time.clock()
+        # print('[insert_many executemany] Time Usage:',end-start)
 
         # d = self.df.loc[:,'num'].sum()
         # d = sum(self.df['单重'])
@@ -78,11 +339,11 @@ class Order(QWidget, Ui_offer_Form): # 订单
         dft.to_sql('students', engine, index=False, if_exists='append')
         """
 
-    # 定义函数，自动输出DataFrme数据写入mysql的数类型字典表,配合to_sql方法使用(注意，其类型只能是SQLAlchemy type )
-    # @pyqtSlot()
-    # def on_pushButton_2_clicked(self):
-    # def mapping_df_types(df):
-    # """自动获取DataFrme各列的数据类型，生成字典。"""
+        #定义函数，自动输出DataFrme数据写入mysql的数类型字典表,配合to_sql方法使用(注意，其类型只能是SQLAlchemy type )
+        # @pyqtSlot()
+        # def on_pushButton_2_clicked(self):
+        # def mapping_df_types(df):
+        """自动获取DataFrme各列的数据类型，生成字典。"""
         # dtypedict = {}
         # for i, j in zip(df.columns, df.dtypes):
         #     if "object" in str(j):
@@ -103,15 +364,15 @@ class Order(QWidget, Ui_offer_Form): # 订单
         #     """
         #     self.model.setDataFrame(self.df_original)
         
-        @pyqtSlot()
-        def on_pushButton_2_clicked(self):
-            """
-            保存数据
-            """
-            # self.df.to_excel(r'./data/fund_data_new.xlsx')
-            engine = create_engine('mysql+pymysql://root:root@localhost:3308/mrp')
-            self.df.to_sql(name='test',con=engine,if_exists='append',index=False)#index=False自增型关键字用false默认为True，指定DataFrame的index是否一同写入数据库
-            # con.dispose() # engine.dispose()
+        # @pyqtSlot()
+        # def on_pushButton_2_clicked(self):
+        #     """
+        #     保存数据
+        #     """
+        #     # self.df.to_excel(r'./data/fund_data_new.xlsx')
+        #     engine = create_engine('mysql+pymysql://root:root@localhost:3308/mrp')
+        #     self.df.to_sql(name='test',con=engine,if_exists='append',index=False)#index=False自增型关键字用false默认为True，指定DataFrame的index是否一同写入数据库
+        #     # con.dispose() # engine.dispose()
 
 
 class Quote(QWidget, Ui_Fquote):
@@ -351,7 +612,7 @@ class Quote(QWidget, Ui_Fquote):
 
     # 保存报价
     @pyqtSlot()
-    def on_PBsave_clicked(self):
+    def on_PBsave_clicked(self):  # save_quote
         """保存报价明细和汇总"""
         if self.CBcorporate.currentText() == "请选择公司名称":
             QMessageBox.warning(self, '警告', '公司名称未选择')
@@ -388,6 +649,7 @@ class Quote(QWidget, Ui_Fquote):
                     value_list.append("0")  # 把空值的数字格设为0值
                 else:
                     value_list.append(self.TWquote.item(k, i).text())
+                print(value_list)
             param.append(value_list)
         rowcount = myMdb().insert_many(sql, param)  # 执行SQL,返回插入的条数
         # 保存报价汇总==============================================================
@@ -714,7 +976,7 @@ class QuoteExamine(QWidget, Ui_Quote_check):
         h = self.Quote_list.currentIndex().row()          # 找到所选行的行数h
         bjdh = self.Quote_list.item(h, 1).text()          # 找到所选h行的1位报价单号
         zt = self.Box_filter.currentText()
-        button = QMessageBox.question(self,"提醒","将要保存审核状态为:"+zt+"？",
+        button = QMessageBox.question(self, "提醒", "将要保存审核状态为:"+zt+"？",
                                       QMessageBox.Ok|QMessageBox.Cancel,QMessageBox.Ok)
         if button == QMessageBox.Ok:
             myMdb().update(table='报价基本信息', 状态="'"+zt+"'", where="报价单号="+bjdh)
