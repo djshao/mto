@@ -90,6 +90,8 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_SaveAction_triggered(self):
         """文件-->保存 or 点击任务栏保存"""
+        name = "TW_order"
+        print(self.findChild(QTableWidget, name))
         if self.findChild(QTableWidget, "TW_order"):
             # Order().on_PBsave_clicked()  # 运行后还不会找到中心控件,要从中心控件入手??????????????????
             if self.centralWidget().lineEdit_3.text() == "":

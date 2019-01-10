@@ -40,8 +40,8 @@ class Order(QWidget, Ui_WidgetOrder):
         self.comboBox.setStyleSheet("QComboBox{color:red;}")
         self.comboBox.addItem(QIcon(":/png/images/Accept.png"), '吴丹')
         self.comboBox.addItem(QIcon(":/png/images/Accept.png"), '费舟亮')
-        # self.SaveAction.triggered.connect(self.on_SaveAction_triggered)    # 点击查询查报价清单
-        self.comboBox.currentIndexChanged.connect(self.sum_amount_1)
+        # 列表框变色
+        self.comboBox.currentIndexChanged.connect(self.comboBox_currentIndexChanged)
 
     # 保存订单
     @pyqtSlot()
@@ -55,33 +55,35 @@ class Order(QWidget, Ui_WidgetOrder):
                                       QMessageBox.Ok|QMessageBox.Cancel, QMessageBox.Ok)
         if button == QMessageBox.Cancel:
             return
-        # 保存订单明细
         rows = self.TW_order.rowCount()  # 总行数
         cols = self.TW_order.columnCount()  # 总列数
-        for row in range(rows+1):
-            if not self.TW_order.item(row, 0):  # 从0行开始找出空值所在行
-                break # 跳出循环
-            elif self.TW_order.item(row, 0).text() == "":  #从0行开始找出空值所在行
-                break
         filed = '生产编号,合同编号,买方,序号,名称,制造标准,规格型号,材质,数量,工作令号,件号,单价,小计,单重,交货期,备注,材料编码'
         preSql = "insert into order_list ("+filed+")"
         subSql = "values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         sql = preSql+subSql  # 前后相加成一个完整的sql
         param = []  # 建传入值的列表
-        for k in range(row +1):
-            value_list = []
-            value_list.append(self.lineEdit_3.text())  # 生产编号加入数组
-            value_list.append(self.lineEdit_4.text())  # 合同编号
-            value_list.append(self.lineEdit_2.text())  # 买方
-            for i in range(cols):
-                # 把None和空值的数字格设为0值
-                if not self.TW_order.item(k, i):
-                    value_list.append("0")
-                elif self.TW_order.item(k, i).text() == "":
-                    value_list.append("0")
-                else:
-                    value_list.append(self.TW_order.item(k, i).text())
-            param.append(value_list)
+        for row in range(rows):
+            # if not self.TW_order.item(row, 0):  # 从0行开始找出空值所在行
+            #     break # 跳出循环
+            # elif self.TW_order.item(row, 0).text() == "":  #从0行开始找出空值所在行
+            #     break
+            if self.TW_order.item(row, 0).text() != "":
+                # for k in range(row):
+                value_list = []
+                value_list.append(self.lineEdit_3.text())  # 生产编号加入数组
+                value_list.append(self.lineEdit_4.text())  # 合同编号
+                value_list.append(self.lineEdit_2.text())  # 买方
+                for i in range(cols):
+                    # 把None和空值的数字格设为0值
+                    if not self.TW_order.item(row, i):
+                        value_list.append("0")
+                    elif self.TW_order.item(row, i).text() == "":
+                        value_list.append("0")
+                    else:
+                        value_list.append(self.TW_order.item(row, i).text())
+                param.append(value_list)
+            else:
+                pass
         rowcount = myMdb().insert_many(sql, param)
         # 保存订单汇总==============================================================
         myMdb().insert(
@@ -98,6 +100,7 @@ class Order(QWidget, Ui_WidgetOrder):
 
     def open_order(self):
         """打开订单-->初始化订单表格"""
+        self.TW_order.blockSignals(True)
         #设置表格设置初始500行
         self.TW_order.setRowCount(500)
         # 设置标题
@@ -128,11 +131,13 @@ class Order(QWidget, Ui_WidgetOrder):
         self.lineEdit_4.setStyleSheet(styleSheet)
         self.lineEdit_5.setStyleSheet(styleSheet)
         self.lineEdit_6.setStyleSheet(styleSheet)
+        self.TW_order.blockSignals(False)
 
     #点击查询按钮事件
     @pyqtSlot()
     def on_PBquery_clicked(self):
         """查询报价单-->生成生产合同明细"""
+        self.TW_order.blockSignals(True)  # 暂停单元格修改信号
         bjdh = self.Line_search.text()
         if bjdh == "":
             data = myMdb().fetchall(table='quote')
@@ -153,27 +158,14 @@ class Order(QWidget, Ui_WidgetOrder):
         self.TW_order.resizeColumnsToContents()             # 自适应宽度
         self.TW_order.resizeRowsToContents()                  # 自适应行高
         self.TW_order.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
-        count_1 = self.sum_order(5)
-        self.lineEdit_6.setText(str(count_1.quantize(Decimal('0'))))   # 添加计算结果到总数量栏,0位小数
-        count_2 = self.sum_order(9)
-        self.lineEdit_7.setText(str(count_2.quantize(Decimal('0.00'))))    # 添加计算结果到总价栏,2位小数
-        # print(count_2)
-
-    # 计算列值总数函数
-    def sum_order(self, l):
-        """计算所选列的总数,l为列数"""
-        count = 0
-        # 获取表格中的总行数,考虑到保存时有空行的情况用总行数.
-        rows = self.TW_order.rowCount()
-        for i in range(rows):
-            # 判断不存在和空值,并设为0值
-            if not self.TW_order.item(i, l):
-                count += 0
-            elif self.TW_order.item(i, l).text() == "":
-                count += 0
-            else:
-                count += Decimal(self.TW_order.item(i, l).text())
-        return count
+        # 汇总数量金额--总金额栏2位小数
+        count_1 = plusColumn(self, "TW_order", 5).quantize(Decimal('0'))
+        self.lineEdit_6.setText(str(count_1))
+        count_2 = plusColumn(self, "TW_order", 9).quantize(Decimal('0.00'))
+        self.lineEdit_7.setText(str(count_2))
+        self.TW_order.blockSignals(False)  # 恢复单元格修改信号
+        # 导入后开启单元格变更事件,比暂停信号要好.  但传参数错误,待研究??????????
+        # self.TW_order.cellChanged.connect(lambda: self.TW_order_cellChanged(int, int))
 
     # 右键菜单
     def contextMenuEvent(self, event):
@@ -206,93 +198,33 @@ class Order(QWidget, Ui_WidgetOrder):
         else:
             self.comboBox.setStyleSheet("QComboBox{color:red;}")
 
-    # 修改订单明细后，设置颜色
     @pyqtSlot(int, int)
-    def on_Quote_detail_cellChanged(self, row, col):
-        """订单明细修改变更事件-->重新计算数量价格"""
-        item = self.TW_order.item(row, col)
-        txt = item.text()
+    def on_TW_order_cellChanged(self, row, col):
+        """订单明细修改变更事件-->红色显示修改\重新计算数量价格"""
+        items = self.TW_order.item(row, col)
+        txt = items.text()
         self.TW_order.blockSignals(True)  # 暂停单元格修改信号
         # 字体颜色（红色）
         # item.setForeground(QBrush(QColor(255, 0, 0)))
         # 背景颜色（红色）
         self.TW_order.item(row, col).setBackground(QBrush(QColor(255, 0, 0)))
         self.TW_order.blockSignals(False)  # 启动单元格修改信号
-        # 报价单号/序号
-        bjdh = self.TW_order.item(row, 1).text()
-        xh = self.TW_order.item(row, 2).text()
-        # 屏幕左下状态栏显示提示信息??????????????????????
-        # self.statusBar().showMessage('序号%s数据改变为:%s'%(txt, xh)) 
+        # 重新计算
+        if col == 5 or col == 8:
+            number = int(self.TW_order.item(row, 5).text())
+            price = Decimal(str(self.TW_order.item(row, 8).text()))
+            amount = Decimal(number*price)
+            self.TW_order.setItem(row, 9, QTableWidgetItem(str('%.2f' % amount)))
+            # 汇总列总数量/总金额,更新到lineEdit
+            count_1 = plusColumn(self, "TW_order", 5).quantize(Decimal('0'))
+            self.lineEdit_6.setText(str(count_1))
+            # 添加计算结果到总金额栏,2位小数
+            count_2 = plusColumn(self, "TW_order", 9).quantize(Decimal('0.00'))
+            self.lineEdit_7.setText(str(count_2))
         # 被修改单元格的列标题
-        lie = self.TW_order.horizontalHeaderItem(col).text()
-        record = '%s:%s修改为%s,'%(lie, table_value, txt)
-        xgjl = 'concat(修改记录,'+"'"+record+"'"+')'
-        # 重新计算汇总
-        self.order_detail_calculate(row)
-        # 汇总总数量/总价,更新到数据库表中
-        count_1 = self.sum_amount_1(7).quantize(Decimal('0'))
-        count_2 = self.sum_amount_1(11).quantize(Decimal('0'))
-
-    def order_detail_calculate(self, row):
-        """修改后重新计算单价/总价"""
-        self.TW_order.blockSignals(True)  # 暂停单元格修改信号
-        # 数量quantity
-        quantity = int(self.TW_order.item(row, 7).text())
-        # 单重unit weight                  
-        if self.TW_order.item(row, 12).text() == "":
-            weight = 0
-        else:
-            weight = Decimal(str(self.TW_order.item(row, 12).text()))
-        # 公斤价weight price
-        if self.TW_order.item(row, 13).text() == "":
-            weight_price = 0
-        else:
-            weight_price = Decimal(str(self.TW_order.item(row, 13).text()))
-        # 加工费cost
-        if self.TW_order.item(row, 14).text() == "":
-            cost = 0
-        else:
-            cost = Decimal(str(self.TW_order.item(row, 14).text()))
-        # 其他费用expenses
-        if self.TW_order.item(row, 15).text() == "":
-            expenses = 0
-        else:
-            expenses = Decimal(str(self.TW_order.item(row, 15).text()))
-        # 计算单价    公斤价="0.00或0时直接用单价,需要转化字符类型再==
-        if float(self.TW_order.item(row, 13).text()) == float(0.00):
-            price = Decimal(str(self.TW_order.item(row, 10).text()))
-        elif float(self.TW_order.item(row, 13).text()) == float(0):
-            price = Decimal(str(self.TW_order.item(row, 10).text()))
-        else:
-            # 单价=单重*公斤价+加工费+其他费用
-            price = weight*weight_price+cost+expenses
-        # 更新单价,小数点2位
-        self.TW_order.setItem(row, 10, QTableWidgetItem(str('%.2f' % price)))
-        # 更新总价amount=数量*单价
-        amount = Decimal(quantity*price)
-        self.TW_order.setItem(row, 11, QTableWidgetItem(str('%.2f' % amount))) 
-        self.TW_order.blockSignals(False)  # 恢复单元格修改信号
-
-    # 计算列值总数函数
-    def sum_amount_1(self, l):
-        """计算所选列的总数,l为列数"""
-        count = 0
-        # 获取表格中的总行数,考虑到保存时有空行的情况用总行数.
-        name = "TW_order"
-        eval_list = "self."+name+".rowCount()"
-        rows = eval(eval_list)
-        print(rows)
-        for i in range(rows):
-            # 判断不存在和空值,并设为0值
-            items = "self."+name+".item("+str(i)+','+str(l)+')'
-            if not eval(items):
-            # if not self.TW_order.item(i, l):
-                count += 0
-            elif self.TW_order.item(i, l).text() == "":
-                count += 0
-            else:
-                count += Decimal(eval(items).text())
-        return count
+        # lie = self.TW_order.horizontalHeaderItem(col).text()
+        # record = '%s:%s修改为%s,'%(lie, table_value, txt)
+        # xgjl = 'concat(修改记录,'+"'"+record+"'"+')'
 
     def offer(self): # pandas
         # self.offerwidget = DataTableWidget()
