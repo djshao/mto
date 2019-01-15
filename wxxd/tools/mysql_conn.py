@@ -148,7 +148,7 @@ class myMdb(object):
 
     #改->返回影响的行数
     def update(self, **kwargs):
-        flag = False
+        # flag = False
         table = kwargs['table']
         #del kwargs['table']
         kwargs.pop('table')  # 如果键值table在字典中存在，删除dict[table]，返回 dict[table]的value值。
@@ -161,7 +161,7 @@ class myMdb(object):
             sql += "%s=%s,"%(k, v)
         sql = sql.rstrip(',')
         sql += ' where %s'%where
-        # print(sql)
+        print(sql)
         try:
             # 执行SQL语句
             self.__cursor.execute(sql)
@@ -170,11 +170,11 @@ class myMdb(object):
             flag = True
             #影响的行数
             rowcount = self.__cursor.rowcount
-        except:
+        except Exception as e:
+            print("执行失败, %s" %e)
             # 发生错误时回滚
-            flag = False
+            # flag = False
             self.__db.rollback()
-            print("执行失败, %s" % err)
         else:
             return rowcount
             # return flag
@@ -220,12 +220,13 @@ class myMdb(object):
             self.__cursor.execute(sql)
             # 使用 fetchone() 方法获取单条数据.
             data = self.__cursor.fetchall()
+            cur = self.__cursor
             # print('data' +str(data))
         except:
             # 发生错误时回滚
             self.__db.rollback()
         else:
-            return data
+            return data, cur
 
     #析构函数，释放对象时使用
     def __del__(self):

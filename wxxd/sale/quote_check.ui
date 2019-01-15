@@ -30,37 +30,22 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,0,0,0,0">
      <item>
-      <widget class="QPushButton" name="Button_pass">
-       <property name="toolTip">
-        <string>审核通过</string>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="text">
-        <string>通过</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="icon">
-        <iconset resource="../erp.qrc">
-         <normaloff>:/png/images/Accept.png</normaloff>:/png/images/Accept.png</iconset>
-       </property>
-      </widget>
+      </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="Button_nopass">
-       <property name="toolTip">
-        <string>审核未通过</string>
-       </property>
-       <property name="text">
-        <string>未通过</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../erp.qrc">
-         <normaloff>:/png/images/stop_32px.ico</normaloff>:/png/images/stop_32px.ico</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="Button_edit">
+      <widget class="QPushButton" name="btn_edit">
        <property name="toolTip">
         <string>修改报价</string>
        </property>
@@ -74,14 +59,26 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="Box_group">
+      <widget class="QComboBox" name="cbo_group">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>分组</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="Box_filter">
+      <widget class="QComboBox" name="cbo_filter">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>审核结果</string>
        </property>
@@ -91,7 +88,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="Button_query">
+      <widget class="QPushButton" name="btn_query">
        <property name="text">
         <string>查询</string>
        </property>
@@ -103,6 +100,12 @@
      </item>
      <item>
       <widget class="QLineEdit" name="Line_search">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>28</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>搜索</string>
        </property>

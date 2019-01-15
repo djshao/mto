@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Fquote</class>
- <widget class="QWidget" name="Fquote">
+ <class>wgt_quote</class>
+ <widget class="QWidget" name="wgt_quote">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,84 +18,178 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>7</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="topMargin">
-        <number>2</number>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="rightMargin">
-        <number>7</number>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>678</width>
+         <height>20</height>
+        </size>
        </property>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>678</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="PBnew">
-         <property name="text">
-          <string>新建</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../erp.qrc">
-           <normaloff>:/png/images/add.png</normaloff>:/png/images/add.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="PBquery">
-         <property name="text">
-          <string>查询</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../erp.qrc">
-           <normaloff>:/png/images/file_manager.png</normaloff>:/png/images/file_manager.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="PBexport">
-         <property name="text">
-          <string>导出</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../erp.qrc">
-           <normaloff>:/png/images/export.png</normaloff>:/png/images/export.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="PBsave">
-         <property name="text">
-          <string>保存</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../erp.qrc">
-           <normaloff>:/png/images/save.ico</normaloff>:/png/images/save.ico</iconset>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QComboBox" name="cbo_state">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>审核情况</string>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_check">
+       <property name="toolTip">
+        <string>审核</string>
+       </property>
+       <property name="text">
+        <string>审核</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../myImage.qrc">
+         <normaloff>:/myImage/images/check.png</normaloff>:/myImage/images/check.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PBnew">
+       <property name="text">
+        <string>导入</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/add.png</normaloff>:/png/images/add.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PBquery">
+       <property name="text">
+        <string>查询</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/file_manager.png</normaloff>:/png/images/file_manager.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PBexport">
+       <property name="text">
+        <string>导出</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/export.png</normaloff>:/png/images/export.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="PBsave">
+       <property name="text">
+        <string>保存</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../erp.qrc">
+         <normaloff>:/png/images/save.ico</normaloff>:/png/images/save.ico</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>无锡市星达石化配件有限公司报价单</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,3,0,0">
+     <item>
+      <widget class="QLabel" name="label_11">
        <property name="font">
         <font>
          <family>微软雅黑</family>
-         <pointsize>18</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>无锡市星达石化配件有限公司报价单</string>
+        <string>公司名称:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="CBcorporate">
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>300</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_12">
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>报价单号:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -103,102 +197,37 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,3,0,0">
-       <item>
-        <widget class="QLabel" name="label_11">
-         <property name="font">
-          <font>
-           <family>微软雅黑</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>公司名称:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="CBcorporate">
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-         <property name="currentText">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>300</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_12">
-         <property name="font">
-          <font>
-           <family>微软雅黑</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>报价单号:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="quotationNo">
-         <property name="font">
-          <font>
-           <family>微软雅黑</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>报价单号</string>
-         </property>
-         <property name="statusTip">
-          <string/>
-         </property>
-         <property name="inputMask">
-          <string>99999999</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="placeholderText">
-          <string>输入报价单号</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QLineEdit" name="quotationNo">
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>报价单号</string>
+       </property>
+       <property name="statusTip">
+        <string/>
+       </property>
+       <property name="frame">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="placeholderText">
+        <string>输入报价单号</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QTableWidget" name="TWquote">
+   <item row="3" column="0">
+    <widget class="QTableWidget" name="tblwgt_quote">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -208,152 +237,9 @@
      <property name="showGrid">
       <bool>true</bool>
      </property>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string/>
-      </property>
-     </row>
-     <column>
-      <property name="text">
-       <string>序号</string>
-      </property>
-      <property name="textAlignment">
-       <set>AlignLeading|AlignVCenter</set>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>名称</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>制造标准</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>规格型号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>材质</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>数量</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>工作令号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>件号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>单价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>总价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>单重</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>公斤价</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>加工费</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>其他费用</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>备注</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>折扣%</string>
-      </property>
-     </column>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1,1,0,0,2,0,0">
      <property name="leftMargin">
       <number>30</number>
@@ -669,6 +555,7 @@
  </widget>
  <resources>
   <include location="../erp.qrc"/>
+  <include location="../myImage.qrc"/>
  </resources>
  <connections/>
 </ui>

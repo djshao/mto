@@ -1,10 +1,107 @@
-# -*- coding: utf-8 -*-
+import sys
+from PyQt5 import QtCore
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication, QDialog, QWidget, QFontDialog, QPushButton, QLineEdit, QGridLayout
+ 
+style = """
+        .QPushButton{
+        border-style:none;
+        border:1px solid #C2CCD8; 
+        color:#F0F0F0;  
+        padding:5px;
+        min-height:20px;
+        border-radius:5px;
+        background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #4D4D4D,stop:1 #292929);
+        }
+    """    
 
-def print_3():
-� � print('locals():', locals())
-� � for i in range(3):
-� � � � globals()['a%s'%i] = i**2
-� � � � #globals()['a{}'.format(i)] = i**2
-� � print(a0, a1, a2)
-� � print(locals())
-� � print(globals())
+class W2(QDialog):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.lineEdit = QLineEdit()
+
+        self.label1 = QLabel("从父窗口接收")
+        self.label2 = QLabel("发送给父窗口")
+        self.lineEdit1 = QLineEdit()
+        self.lineEdit2 = QLineEdit() 
+
+        self.button2 = QPushButton(u'发送',self)
+
+        layout = QGridLayout()
+        layout.addWidget(self.label1,0,0)
+        layout.addWidget(self.lineEdit1,0,1)
+        layout.addWidget(self.label2,1,0)
+        layout.addWidget(self.lineEdit2,1,1)
+        layout.addWidget(self.button2,2,1)
+        
+        self.setLayout(layout)
+        self.setStyleSheet(style)
+        self.button2.clicked.connect(self.transfer)
+        
+        
+    def receive(self,s):
+        print (u'接受到父窗口值')
+        self.lineEdit1.setText(str(s))        
+        
+    def transfer(self):
+        str = self.lineEdit2.text()
+        self.emit(SIGNAL("transfer_father"),str)
+        
+        
+ 
+class MyForm(QDialog):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.setWindowTitle(u'父窗口')
+
+        self.label1 = QLabel("从子窗口接收")
+        self.label2 = QLabel("发送给子窗口")
+        self.lineEdit1 = QLineEdit()
+        self.lineEdit2 = QLineEdit() 
+        
+        
+        self.button1 = QPushButton(u'子窗口',self)
+        self.button2 = QPushButton(u'发送',self)
+        
+        layout = QGridLayout()
+        layout.addWidget(self.label1,0,0)
+        layout.addWidget(self.lineEdit1,0,1)
+        layout.addWidget(self.label2,1,0)
+        layout.addWidget(self.lineEdit2,1,1)
+        layout.addWidget(self.button1,2,0)
+        layout.addWidget(self.button2,2,1)
+        self.setLayout(layout)
+ 
+        self.button1.clicked.connect(self.child)
+        self.button2.clicked.connect(self.transfer)
+        self.setStyleSheet(style)
+
+ 
+    def child(self):
+        print (u'弹出子窗口')
+        self.w2 = W2()
+        # self.connect(self.w2, SIGNAL("transfer_father"), self.receive)
+        self.w2.clicked.connect(self.receive)
+        self.w2.show()
+        # self.w2.connect(self, SIGNAL("transfer_child"), self.w2.receive)
+
+         
+    @QtCore.pyqtSlot(str) 
+    def receive(self,s):
+        print (u'接受到子窗口值')
+        self.lineEdit1.setText(str(s))
+ 
+    def transfer(self):
+        str = self.lineEdit2.text() 
+        self.emit(QtCore.SIGNAL("transfer_child"),str)
+       
+  
+
+ 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    myapp = MyForm()
+    myapp.show()
+    sys.exit(app.exec_())

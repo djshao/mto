@@ -1,0 +1,55 @@
+<RCC>
+  <qresource prefix="/myImage">
+    <file>images/adjust.png</file>
+    <file>images/loading.png</file>
+    <file>images/Drawing.png</file>
+    <file>images/buy.ico</file>
+    <file>images/Accept.png</file>
+    <file>images/add.png</file>
+    <file>images/check.png</file>
+    <file>images/copy_32px_5.png</file>
+    <file>images/Drawing.png</file>
+    <file>images/ERP.png</file>
+    <file>images/export.png</file>
+    <file>images/filter.png</file>
+    <file>images/file_manager.png</file>
+    <file>images/finance.png</file>
+    <file>images/pay_32px.png</file>
+    <file>images/Logo.jpg</file>
+    <file>images/Logo_2.jpg</file>
+    <file>images/mail.ico</file>
+    <file>images/microscope.png</file>
+    <file>images/modify_24px.png</file>
+    <file>images/New (2).png</file>
+    <file>images/new_32px.png</file>
+    <file>images/new_file_32px.png</file>
+    <file>images/open.ico</file>
+    <file>images/order.ico</file>
+    <file>images/print.png</file>
+    <file>images/Sales.png</file>
+    <file>images/save.ico</file>
+    <file>images/save_24px.png</file>
+    <file>images/shopping_24px.png</file>
+    <file>images/text_A_32px.png</file>
+    <file>images/stop.ico</file>
+    <file>images/warehouse.png</file>
+    <file>images/transport.ico</file>
+    <file>images/logistics_32px.ico</file>
+    <file>images/zip_32px.png</file>
+    <file>images/machine.png</file>
+    <file>images/quote.ico</file>
+    <file>images/about.png</file>
+    <file>images/copy.png</file>
+    <file>images/cut.png</file>
+    <file>images/exit.png</file>
+    <file>images/new.png</file>
+    <file>images/next.png</file>
+    <file>images/open.png</file>
+    <file>images/paste.png</file>
+    <file>images/previous.png</file>
+    <file>images/redo.png</file>
+    <file>images/save.png</file>
+    <file>images/saveAs.png</file>
+    <file>images/undo.png</file>
+  </qresource>
+</RCC>

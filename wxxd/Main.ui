@@ -97,7 +97,7 @@
      </property>
      <addaction name="action_quote"/>
      <addaction name="action_quote_check"/>
-     <addaction name="actiontiaojia"/>
+     <addaction name="action_adjust_price"/>
      <addaction name="separator"/>
      <addaction name="action_order"/>
     </widget>
@@ -470,7 +470,7 @@
     <string>打印</string>
    </property>
   </action>
-  <action name="actiontiaojia">
+  <action name="action_adjust_price">
    <property name="icon">
     <iconset resource="erp.qrc">
      <normaloff>:/png/images/resize_ver_32px.png</normaloff>:/png/images/resize_ver_32px.png</iconset>

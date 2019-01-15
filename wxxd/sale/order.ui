@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,3,0">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0,0,0,0,0">
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
@@ -33,24 +33,25 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLineEdit" name="Line_search">
+      <widget class="QComboBox" name="cob_CO">
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>28</height>
+         <width>100</width>
+         <height>26</height>
         </size>
        </property>
-       <property name="toolTip">
-        <string>搜索</string>
+       <property name="editable">
+        <bool>false</bool>
        </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>搜索报价单....</string>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cob_NO">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>26</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -427,7 +428,7 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="10">
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="lineEdit_8">
        <property name="minimumSize">
         <size>
          <width>0</width>
