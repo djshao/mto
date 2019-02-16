@@ -13,35 +13,36 @@ from PyQt5.QtWidgets import *
 # 天气模块
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-# qtpandas模块
-# from qtpandas.models.DataFrameModel import DataFrameModel
-# from qtpandas.views.DataTableView import DataTableWidget
-# import pandas as pd
-# from sqlalchemy import create_engine
-
-# from Ui_Main import Ui_MainWindow
-from Ui_mainwindow import Ui_MainWindow
-from Ui_查询 import Ui_Query_Form
+# 销售
+from ui.Ui_mainwindow import Ui_MainWindow
 from 查询 import *
-from Ui_首页 import Ui_First_Form
+from ui.Ui_首页 import Ui_First_Form
 from sale.sale import Quote, QuoteExamine, Examine, Order, AdjustPrice
-from sale.Ui_quote_check import Ui_Quote_check
-# from produce.produce import *
+from ui.Ui_quote_check import Ui_Quote_check
+# 生产
+from produce.produce import *
+from quality.qa import *
+
+from tools.datadialog import DateDialog  # 查询子窗口
 from tools.mysql_conn import myMdb
 
-class Ui_ERP(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(Ui_ERP, self).__init__(parent)
-        self.setupUi(self)
-        # self.setCentralWidget(FirstForm())
+class Main(QMainWindow, Ui_MainWindow):
+    # Signal_OneParameter = pyqtSignal(str)  # 定义dock窗口信号用
 
-        self.imageLabel = QLabel()
-        self.imageLabel.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-        self.image = QImage()
-        if self.image.load("./wxxd/images/20191.jpg"):
-            self.imageLabel.setPixmap(QPixmap(QPixmap.fromImage(self.image)))
-            # self.resize(self.image.width(), self.image.height())
-        self.setCentralWidget(self.imageLabel)
+    def __init__(self, parent=None):
+        super(Main, self).__init__(parent)
+        self.setupUi(self)
+        self.machine = Inspection()
+        self.setCentralWidget(self.machine)
+
+        # 启动页图像
+        # self.imageLabel = QLabel()
+        # self.imageLabel.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        # self.image = QImage()
+        # if self.image.load("./wxxd/images/20191.jpg"):
+        #     self.imageLabel.setPixmap(QPixmap(QPixmap.fromImage(self.image)))
+        #     # self.resize(self.image.width(), self.image.height())
+        # self.setCentralWidget(self.imageLabel)
         self.statusBar.showMessage('欢迎某某某登录星达ERP') # 屏幕左下状态栏显示提示信息
 
     # def paintEvent(self, event):
@@ -52,101 +53,111 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_actionHomepage_triggered(self): # 工作-->首页
-        self.setCentralWidget(FirstForm())
+        self.firstform = FirstForm()
+        self.setCentralWidget(self.firstform)
 
     @pyqtSlot()
     def on_actionQuote_triggered(self): # 工作-->销售-->报价
-        self.setCentralWidget(Quote())
+        self.quote = Quote()
+        self.setCentralWidget(self.quote)
 
     @pyqtSlot()
-    def on_action_adjust_price_triggered(self): # 工作-->销售-->调价
-        # self.setCentralWidget(AdjustPrice())
-        # def dock_quoteList(self):  # 子类下没有addDockWidget,不能用?????
-        """调价停靠窗口-->显示审核通过报价清单"""
-        layout = QHBoxLayout()
-        self.dockwidget = QDockWidget("审核通过的报价目录", self)
-        res = myMdb().fetchall(table='报价基本信息', where="状态='审核通过'")
-        # data[1]是cur,data[0]是data数据
-        col_lst = [tup[0] for tup in res[1].description]
-        data = [tup[0] for tup in res[0]]
-        row = len(data)     # 获得data的行数
-        vol = len(res[0][0])  # 获得data的列数.cur.description或len(data[0])
-        # 插入表格
-        self.Quote_list = QTableWidget(row, vol)             # 设置row行vol列的表格
-        font = QtGui.QFont('微软雅黑', 9)
-        self.Quote_list.horizontalHeader().setFont(font)      # 设置行表头字体
-        self.Quote_list.verticalHeader().setVisible(False)    # 左垂直表头不显示
-        self.Quote_list.setSelectionMode(QAbstractItemView.SingleSelection)  #只能选择单行
-        # 设置标题
-        self.Quote_list.setHorizontalHeaderLabels(col_lst)
-        # 设置表格颜色             
-        self.Quote_list.horizontalHeader().setStyleSheet('QHeaderView::section{background:skyblue}')
-        self.Quote_list.setEditTriggers(QAbstractItemView.NoEditTriggers)   # 设置表格禁止编辑
-        self.Quote_list.setSelectionBehavior(QAbstractItemView.SelectRows)  # 设置整行选中
-        self.Quote_list.setFrameStyle(QFrame.Box | QFrame.Plain)
-        # 构建表格插入数据
-        for i in range(row):                                      # i到row-1的数量
-            for j in range(vol):
-                temp_data = res[0][i][j]                            # 临时记录，不能直接插入表格
-                data1 = QTableWidgetItem(str(temp_data))          # 转换后可插入表格
-                self.Quote_list.setItem(i, j, data1)
-        # self.Quote_list.resizeColumnsToContents()             # 自适应宽度
-        self.Quote_list.resizeRowsToContents()                  # 自适应行高,放最后可以等数据写入后自动适应表格数据宽度
-        self.Quote_list.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
-        self.dockwidget.setWidget(self.Quote_list)
-        self.addDockWidget(Qt.TopDockWidgetArea, self.dockwidget)
-        # self.Quote_list.addWidget(self.Quote_list)
-        # self.setLayout(layout)
+    def on_actionAdjust_triggered(self): # 工作-->销售-->调价
+        self.adjustprice = AdjustPrice()
+        self.setCentralWidget(self.adjustprice)
 
     @pyqtSlot()
     def on_actionOrder_triggered(self): # 工作-->销售-->订单
-        self.setCentralWidget(Order())
+        self.order = Order()
+        self.setCentralWidget(self.order)
 
     @pyqtSlot()
     def on_actionCheck_triggered(self): # 工作-->销售-->报价审核
-        self.setCentralWidget(Examine())
+        self.examine = Examine()
+        self.setCentralWidget(self.examine)
+        # 连接审核修改记录信号到状态栏
+        self.examine.Signal_xgjl.connect(self.statusbar_info)
 
+    def statusbar_info(self, record):  # 状态栏信息
+        self.statusBar.showMessage(record)
 
     @pyqtSlot()
-    def on_actionscjd_triggered(self): # 工作-->查询-->生产进度
+    def on_actionziyuan_triggered(self): # 工作-->查询-->生产进度
         """工作-->查询-->生产进度 中间窗口显示多文档界面用法"""
         # print("key=%s ,value=%s" % (item.text(0), item.text(1)))
-        self.mdi = QMdiArea()                                 #多文档界面
-        self.setCentralWidget(self.mdi)                       #创建中央控件多文档界面要self.mdi
-        sub=QMdiSubWindow()
-        self.child = QueryForm()
-        sub.setWidget(self.child)
-        sub.setWindowTitle("查询生产进度")
-        self.mdi.addSubWindow(sub)
-        sub.show()
+        # self.mdi = QMdiArea()  #多文档界面
+        # self.setCentralWidget(self.mdi)  #创建中央控件多文档界面要self.mdi
+        sub_dlg=QMdiSubWindow()
+        self.child = OpenDialog()
+        sub_dlg.setWidget(self.child)
+        sub_dlg.setWindowTitle("查询生产进度")
+        self.mdi.addSubWindow(sub_dlg)
+        sub_dlg.show()
+        # self.mdi.tileSubWindows() # 平铺窗口
 
-    def sale(self): # 用多窗口法,工作-->销售
-        # 多文档界面
-        layout = QVBoxLayout()
-        self.mdi = QMdiArea()
-        # 设置界面tabbar模式
-        self.mdi.setViewMode(QMdiArea.TabbedView)  # 页切换模式 tab模式
-        self.mdi.setFocusPolicy(Qt.ClickFocus)  # 接收鼠标单击策略
-        self.mdi.setTabPosition(QTabWidget.North)
-        self.mdi.setTabsClosable(True)  # 每个tab上放置红叉关闭某一个tab ，false:没有叉；true:有叉
-        self.mdi.setTabsMovable(True)  # 多个tab可鼠标拖动摆放顺序
-        self.mdi.setTabShape(QTabWidget.Triangular)  # tab的形状，Rounded圆角型；Triangular三角形
-        # 创建框架
-        self.frm = QFrame()
-        self.frm.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)  # 框架显示外形。
-                       # StylePanel画一个矩形面板，根据当前GUI风格的不同而不同，可被凸起或凹陷
-                       # Sunken画一个3D的凹陷显示效果
-        self.frm.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # 大小策略 水平和垂直都可收缩shrunk
-        self.frm.setLayout(layout)  # 设置frm的布局管理 如果此widget(frm)上已有layout,那先删除已有的,再添加新的
-        self.setCentralWidget(self.mdi)
 
-        sub = QMdiSubWindow()
-        self.child = Examine()
-        sub.setWidget(self.child)
-        sub.setWindowTitle("销售首页")
-        self.mdi.addSubWindow(sub)
-        sub.show()
-        self.mdi.tileSubWindows() # 平铺窗口
+    # ==========================工作-->生产===============================
+    @pyqtSlot()
+    def on_actionPlan_triggered(self):  # 工作-->生产-->计划排产
+        self.plan = Plan()
+        self.setCentralWidget(self.plan)
+        # self.mdiProduce()
+
+    @pyqtSlot()
+    def on_actionFgInput_triggered(self):  # 工作-->生产-->锻造-->锻造进度录入
+        self.forge = Forge()
+        self.setCentralWidget(self.forge)
+
+    @pyqtSlot()
+    def on_actionMchInput_triggered(self):  # 工作-->生产-->机加-->机加进度录入
+        self.machine = Machine()
+        self.setCentralWidget(self.machine)
+
+    # def mdiProduce(self): # 用多窗口法,工作-->计划排产
+        """多文档界面"""
+        # layout = QHBoxLayout()
+        # self.mdi = QMdiArea()
+        # # 设置界面tabbar模式
+        # self.mdi.setViewMode(QMdiArea.SubWindowView)  # 页切换模式 TabbedView模式
+        # self.mdi.setFocusPolicy(Qt.ClickFocus)  # 接收鼠标单击策略
+        # self.mdi.setTabPosition(QTabWidget.North)
+        # self.mdi.setTabsClosable(True)  # 每个tab上放置红叉关闭某一个tab ，false:没有叉；true:有叉
+        # self.mdi.setTabsMovable(True)  # 多个tab可鼠标拖动摆放顺序
+        # self.mdi.setTabShape(QTabWidget.Triangular)  # tab的形状，Rounded圆角型；Triangular三角形
+        # # 创建框架
+        # self.frm = QFrame()
+        # self.frm.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)  # 框架显示外形。
+        #                # StylePanel画一个矩形面板，根据当前GUI风格的不同而不同，可被凸起或凹陷
+        #                # Sunken画一个3D的凹陷显示效果
+        # self.frm.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # 大小策略 水平和垂直都可收缩shrunk
+        # self.frm.setLayout(layout)  # 设置frm的布局管理 如果此widget(frm)上已有layout,那先删除已有的,再添加新的
+        # self.setCentralWidget(self.mdi)
+
+        # # 加入判断是否已经打开?????
+        # if self.mdi.subWindowList() == []:
+        #     sub = QMdiSubWindow()
+        #     # self.child = Produce()
+        #     sub.setWidget(self.produce)
+        #     sub.setWindowTitle("计划排产")
+        #     self.mdi.addSubWindow(sub)
+        #     # 关闭之后不会自动释放空间，需要此函数让其在close后自动释放
+        #     self.mdi.setAttribute(Qt.WA_DeleteOnClose)
+        #     sub.show()
+        #     """设置布局来实现几个窗口跟随变化"""
+        #     # self.mdi.tileSubWindows() # 平铺窗口
+        # else:
+        #     for title in self.mdi.subWindowList():
+        #         # print(title.windowTitle())
+        #         if title.windowTitle() == "计划排产":
+        #             title.showMaximized()
+
+
+    # ==========================工作-->质保===============================
+    @pyqtSlot()
+    def on_actionInspection_triggered(self):  # 工作-->生产-->机加-->机加进度录入
+        self.inspect = Inspection()
+        self.setCentralWidget(self.inspect)
+
 
     # ==========================任务栏连接区===============================
     @pyqtSlot()
@@ -180,12 +191,34 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
         if self.findChild(QTableWidget, "TWquote"):
             Quote().on_PBsave_clicked()
 
-    # ============================Dock窗口区===============================
     @pyqtSlot()
     def on_action_query_triggered(self):
-        """查询-->停靠窗口"""
-        self.dockmain()
+        """查询-->"""
+        dialog = DateDialog(self)
+        # '''连接子窗口的自定义信号与主窗口的槽函数'''
+        # dialog.Signal_No.connect(self.getcheckNo)
+        emn = Examine()
+        dialog.Signal_No.connect(emn.quote_detail)
+        dialog.show()
+        # self.dockmain()
 
+    @pyqtSlot()
+    def on_actionTile_triggered(self):  # 平铺mid窗口
+        self.mdi.tileSubWindows()
+
+    @pyqtSlot()
+    def on_actionCascade_triggered(self):  # 层叠mid窗口
+        self.mdi.cascadeSubWindows()
+
+    @pyqtSlot()
+    def on_actionCloseAll_triggered(self):  # 关闭所有窗口
+        # self.mdi.setViewMode(QMdiArea.TabbedView)
+        # self.mdi.closeActiveSubWindow()
+        self.mdi.closeAllSubWindows()
+        print(self.mdi.subWindowList()[0].windowTitle())
+
+
+    # ============================Dock窗口区===============================
     def dockmain(self):
         if self.findChild(QDockWidget, "dockWidget"):
             # 把关闭隐藏的控件打开
@@ -342,21 +375,28 @@ class Ui_ERP(QMainWindow, Ui_MainWindow):
         self.tablewidget.resizeRowsToContents()                  # 自适应行高,放最后可以等数据写入后自动适应表格数据宽度
         self.tablewidget.horizontalHeader().setStretchLastSection(True)  # 最后一列对齐边框
 
-    def tablewidget_itemClicked(self):
+    def tablewidget_itemClicked(self):  #还可以考虑全局变量
         h = self.tablewidget.currentIndex().row()
-        bjdh = self.tablewidget.item(h, 1).text()
-        qte_date = self.tablewidget.item(h, 5).text()
-        # print(bjdh)
+        # 把g_NO设为全局变量,输出查询的报价单号
+        global g_NO
+        g_NO = self.tablewidget.item(h, 1).text()
+        # dock窗口第6列的值
+        # qte_data = self.tablewidget.item(h, 5).text()
+        print('g_NO='+str(g_NO))
+        print(self.centralWidget.objectName)
+
+    def getcheckNo(self, bjdh, qte_date):  # 主窗口开启子窗口,实例化子窗口,传值
         self.check = Examine()
         self.check.quote_detail(bjdh, qte_date)
-        # self.check.exec_()
+        # self.gridLayout_2.addWidget(self.tblwgt_quote)
         self.setCentralWidget(self.check)
+        # self.Signal_OneParameter.disconnect(self.getcheckNo)  #删除信号
 
-class QueryForm(QWidget, Ui_Query_Form): # 工作-->查询
-    """查询报表功能"""
-    def __init__(self):
-        super(QueryForm, self).__init__()
-        self.setupUi(self)
+# class QueryForm(QWidget, Ui_Query_Form): # 工作-->查询
+#     """查询报表功能"""
+#     def __init__(self):
+#         super(QueryForm, self).__init__()
+#         self.setupUi(self)
 
 
 class FirstForm(QWidget, Ui_First_Form): # 首页
@@ -398,6 +438,6 @@ class FirstForm(QWidget, Ui_First_Form): # 首页
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
-    Win = Ui_ERP()
+    Win = Main()
     Win.show()
     sys.exit(app.exec_())

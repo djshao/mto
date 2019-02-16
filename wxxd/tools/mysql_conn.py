@@ -179,6 +179,19 @@ class myMdb(object):
             return rowcount
             # return flag
 
+    def updateAll(self, sql, param):
+        # sql = "INSERT INTO 锻造 (生产编号,序号,已完成数) VALUES (1901101,1,'2'),(1901101,3,'4') ON DUPLICATE KEY UPDATE 已完成数=VALUES(已完成数)"
+        try:
+            self.__cursor.executemany(sql, param)
+            # 提交到数据库执行
+            self.__db.commit()
+            rowcount = self.__cursor.rowcount
+        except Exception as e:
+            print(e)
+            self.__db.rollback()
+        else:
+            return rowcount
+
     #查->单条数据
     def fetchone(self, **kwargs):
         table = kwargs['table']

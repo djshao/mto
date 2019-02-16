@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/myImage">
+    <file>images/hot_32px.png</file>
+    <file>images/robot_32px.png</file>
+    <file>images/enter_32px.png</file>
+    <file>images/machine.png</file>
     <file>images/adjust.png</file>
     <file>images/loading.png</file>
     <file>images/Drawing.png</file>

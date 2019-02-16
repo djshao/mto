@@ -7,19 +7,28 @@ from decimal import Decimal
 
 # 计算列值总数函数plus 加,和
 def plusColumn(self, name, l):
-    """计算所选列的总数,l为列数;plus 加,和"""
+    """计算所选列的总数,l为列数;plus 加,和
+    name:tablewidget的objectname
+    l:要计算的列
+    """
     count = 0
     m_child = self.findChild(QTableWidget, name)
     rows = m_child.rowCount()
     for i in range(rows):
-        # 判断不存在和空值,并设为0值
-        if not m_child.item(i, l):
-            count += 0
-        elif m_child.item(i, l).text() == "":
-            count += 0
+        if not m_child.item(i, l) or m_child.item(i, l).text() == "":
+            return count
         else:
-            count += Decimal(m_child.item(i, l).text())
+            count += int(m_child.item(i, l).text())
     return count
+
+    #     # 判断不存在和空值,并设为0值
+    #     if not m_child.item(i, l):
+    #         count += 0
+    #     elif m_child.item(i, l).text() == "":
+    #         count += 0
+    #     else:
+    #         count += int(m_child.item(i, l).text())
+    # return count
 
 def computePrice(self, name, row):
     """修改后重新计算单价/总价"""
