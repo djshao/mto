@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>wgtInput</class>
+ <widget class="QWidget" name="wgtInput">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QPushButton" name="pbtnSave">
+     <property name="text">
+      <string>保存</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../myImage.qrc">
+       <normaloff>:/myImage/images/save.ico</normaloff>:/myImage/images/save.ico</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="btn_query">
+     <property name="text">
+      <string>查询</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../myImage.qrc">
+       <normaloff>:/myImage/images/file_manager.png</normaloff>:/myImage/images/file_manager.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QComboBox" name="cmbWork">
+     <property name="minimumSize">
+      <size>
+       <width>90</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="currentText">
+      <string>工艺环节</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>工艺环节</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>锻造</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>机加</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>终检</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QComboBox" name="cmbDpmt">
+     <property name="minimumSize">
+      <size>
+       <width>90</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>生产部门</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QComboBox" name="cmbNO">
+     <property name="minimumSize">
+      <size>
+       <width>90</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <property name="currentText">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
+    <widget class="QComboBox" name="comboBox_2">
+     <property name="minimumSize">
+      <size>
+       <width>90</width>
+       <height>26</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>生产状态</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>全部完成</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>部分完成</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="6">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="7">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>393</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="8">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>锻 造 进 度 录 入</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="8">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QTableWidget" name="tblwgtInput">
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectItems</enum>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../myImage.qrc"/>
+ </resources>
+ <connections/>
+</ui>
