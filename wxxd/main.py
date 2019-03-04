@@ -28,8 +28,8 @@ from delivery.delivery import *
 from tools.datadialog import DateDialog  # 查询子窗口
 from tools.mysql_conn import myMdb
 from tools.dock import DockMain
+import tools.globaldict as gl
 
-mymdb = myMdb()
 
 class Main(QMainWindow, Ui_MainWindow):
     # Signal_dockparam = pyqtSignal(list)  # 定义dock窗口信号用
@@ -37,52 +37,117 @@ class Main(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
         self.setupUi(self)
-        self.delivery = DeliveryList()
-        self.setCentralWidget(self.delivery)
-        self.m_slot = self.delivery.writeParam
-
-        # 停靠窗口法
-        # self.dock = DockMain()
-        # self.addDockWidget(Qt.DockWidgetArea(4), self.dock.dockWidget)
-        # # 连接子窗口的自定义信号与主窗口的槽函数.m_slot为槽变量,根据工作目录选中而来
-        # self.dock.Signal_dockparam.connect(self.m_slot)
+        self.firstform = FirstForm()
+        self.setCentralWidget(self.firstform)
+        # 设置全局变量
+        gl._init()
 
         self.statusBar.showMessage('欢迎某某某登录星达ERP') # 屏幕左下状态栏显示提示信息
 
-    # def paintEvent(self, event):
-        # """窗口背景图片"""
-        # painter = QPainter(self)
-        # pixmap = QPixmap("./wxxd/images/2019.jpg")
-        # painter.drawPixmap(self.rect(), pixmap)
-
     @pyqtSlot()
     def on_actionHomepage_triggered(self): # 工作-->首页
+        # 清除保存/查询变量
+        self.clearVar()
         self.firstform = FirstForm()
         self.setCentralWidget(self.firstform)
 
+#===========================工作-->销售===============================
     @pyqtSlot()
     def on_actionQuote_triggered(self): # 工作-->销售-->报价
+        # 清除保存/查询变量
+        self.clearVar()
         self.quote = Quote()
         self.setCentralWidget(self.quote)
 
-
     @pyqtSlot()
     def on_actionAdjust_triggered(self): # 工作-->销售-->调价
+        # 清除保存/查询变量
+        self.clearVar()
         self.adjustprice = AdjustPrice()
         self.setCentralWidget(self.adjustprice)
 
     @pyqtSlot()
     def on_actionOrder_triggered(self): # 工作-->销售-->订单
-        self.order = Order()
-        self.setCentralWidget(self.order)
-        # self.m_slot = ''
+        # 清除保存/查询变量
+        self.clearVar()
+        order = Order()
+        self.setCentralWidget(order)
+
+        # 定义dock窗口查询用表名/标题/字段/where
+        tbl = 'quote'
+        tag = '报价单号'
+        company = '公司名称'
+        header = ['序号','名称','制造标准','规格型号','材质','数量','工作令号','件号','单价','金额','备注','净重']
+        field = '公司名称,序号,名称,制造标准,规格型号,材质,数量,工作令号,件号,单价,金额,备注,净重'
+        gl.set_value('tbl', tbl)
+        gl.set_value('tag', tag)
+        gl.set_value('field', field)
+        gl.set_value('header', header)
+        gl.set_value('company', company)
+
+        # 定义dock窗口槽
+        self.m_slot = order.writeParam
+        # 连接子窗口的自定义信号与主窗口的槽函数.m_slot为槽变量,根据工作目录选中而来
+        # self.dock.Signal_dockparam.connect(self.m_slot)
+        # 定义保存函数变量
+        self.m_save = order.save
 
     @pyqtSlot()
     def on_actionCheck_triggered(self): # 工作-->销售-->报价审核
+        # 清除保存/查询变量
+        self.clearVar()
         self.examine = Examine()
         self.setCentralWidget(self.examine)
         # 连接审核修改记录信号到状态栏
         self.examine.Signal_xgjl.connect(self.statusbar_info)
+
+    @pyqtSlot()
+    def on_actionDL_triggered(self):  # 工作-->销售-->运输发货-->新建发货清单
+        # 清除保存/查询变量
+        self.clearVar()
+        self.delivery = DeliveryList()
+        self.setCentralWidget(self.delivery)
+        # 定义dock窗口槽,传递查询选择数据到发货清单
+        self.m_slot = self.delivery.writeParam
+        # 定义保存函数
+        self.m_save = self.delivery.saveData
+
+    @pyqtSlot()
+    def on_actionDR_triggered(self):  # 工作-->销售-->运输发货-->修改发货清单
+        # 清除保存/查询变量
+        self.clearVar()
+        self.deliveryrevise = DeliveryRevise()
+        self.setCentralWidget(self.deliveryrevise)
+        # 定义保存函数变量
+        self.m_save = self.deliveryrevise.saveDeliveryRevise
+
+    @pyqtSlot()
+    def on_actionPK_triggered(self):  # 工作-->销售-->运输发货-->包装运输
+        # 清除保存/查询变量
+        self.clearVar()
+        self.pack = Packing()
+        self.setCentralWidget(self.pack)
+        # 定义保存函数变量
+        self.m_save = self.pack.savePack
+
+    @pyqtSlot()
+    def on_actionTS_triggered(self):  # 工作-->销售-->运输发货-->物流
+        # 清除保存/查询变量
+        self.clearVar()
+        self.transport = Transport()
+        self.setCentralWidget(self.transport)
+        # 定义dock窗口槽,传递查询选择数据到安排运输
+        self.m_slot = self.transport.writeParam
+        # 定义dock窗口标题
+        
+        # 定义保存函数变量
+        # self.m_save = self.transport.savetransport
+
+
+    @pyqtSlot()
+    def on_actionWR_triggered(self):  # 工作-->销售-->运输发货-->质保书
+        self.warranty = Warranty()
+        self.setCentralWidget(self.warranty)
 
     def statusbar_info(self, record):  # 状态栏信息
         self.statusBar.showMessage(record)
@@ -101,8 +166,7 @@ class Main(QMainWindow, Ui_MainWindow):
         sub_dlg.show()
         # self.mdi.tileSubWindows() # 平铺窗口
 
-
-    # ==========================工作-->生产===============================
+# ==========================工作-->生产===============================
     @pyqtSlot()
     def on_actionPlan_triggered(self):  # 工作-->生产-->计划排产
         self.plan = Plan()
@@ -111,11 +175,15 @@ class Main(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_actionFgInput_triggered(self):  # 工作-->生产-->锻造-->锻造进度录入
+        # 清除保存/查询变量
+        self.clearVar()
         self.forge = Forge()
         self.setCentralWidget(self.forge)
 
     @pyqtSlot()
     def on_actionMchInput_triggered(self):  # 工作-->生产-->机加-->机加进度录入
+        # 清除保存/查询变量
+        self.clearVar()
         self.machine = Machine()
         self.setCentralWidget(self.machine)
 
@@ -160,31 +228,13 @@ class Main(QMainWindow, Ui_MainWindow):
 
     # ==========================工作-->质保===============================
     @pyqtSlot()
-    def on_actionInspection_triggered(self):  # 工作-->生产-->检验进度录入
+    def on_actionInspection_triggered(self):  # 工作-->生产-->出厂检验录入
+        # 清除保存/查询变量
+        self.clearVar()
         self.inspect = Inspection()
         self.setCentralWidget(self.inspect)
 
-    # ==========================工作-->送货===============================
-    @pyqtSlot()
-    def on_actionDeliveryList_triggered(self):  # 工作-->送货-->送货清单
-        self.delivery = DeliveryList()
-        self.setCentralWidget(self.delivery)
-        # 定义槽,传递给主界面用
-        self.m_slot = self.delivery.writeParam
-
-    @pyqtSlot()
-    def on_actionPackingList_triggered(self):  # 工作-->送货-->装箱清单
-        self.packing = PackingList()
-        self.setCentralWidget(self.packing)
-        # 定义槽,传递给主界面用
-        # self.m_slot = self.packing.writeParam
-
-    @pyqtSlot()
-    def on_actionWarranty_triggered(self):  # 工作-->送货-->质保
-        self.warranty = Warranty()
-        self.setCentralWidget(self.warranty)
-
-    # ==========================任务栏连接区===============================
+# ==========================任务栏连接区===============================
     @pyqtSlot()
     def on_actionNew_triggered(self):
         """文件-->新建 or 点击任务栏新建"""
@@ -197,7 +247,7 @@ class Main(QMainWindow, Ui_MainWindow):
     def on_actionOpen_triggered(self):
         """文件-->打开 or 点击任务栏"""
         file, ok = QFileDialog.getOpenFileName(
-            self, "打开", "C:/Users/Administrator/Desktop/Python/学习相关/", 
+            self, "打开", "C:/Users/Administrator/Desktop/Python/学习相关/",
             "All Files (*);;Text Files (*.txt)")
         # 在状态栏显示文件地址  		
         self.statusBar.showMessage(file)
@@ -205,33 +255,33 @@ class Main(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_actionSave_triggered(self):
         """文件-->保存 or 点击任务栏保存"""
-        # self.delivery = DeliveryList()
-        self.delivery.saveDate()
-
-        # name = "TW_order"
-        # print(self.findChild(QStatusBar, "statusbar"))
-        # if self.findChild(QTableWidget, "TW_order"):
-        #     # Order().on_PBsave_clicked()  # 运行后还不会找到中心控件,要从中心控件入手??????????????????
-        #     if self.centralWidget().lineEdit_3.text() == "":
-        #         QMessageBox.about(self, "注意", "数据不能为空,返回修改!")
-        #         return
-        #     print(self.centralWidget().lineEdit_4.text())
-        # if self.findChild(QTableWidget, "TWquote"):
-        #     Quote().on_PBsave_clicked()
+        # 判断对象self是否name为'm_save'的特性,返回true就执行
+        if hasattr(self, 'm_save'):
+            self.m_save()
+        else:
+            return
 
     @pyqtSlot()
     def on_action_query_triggered(self):
-        """查询-->"""
-        # 判断是否存在dock窗口
-        if self.findChild(QDockWidget, "dockWidget"):
-            self.dock.dockWidget.show()
-            self.dock.Signal_dockparam.connect(self.m_slot)
-        else:
+        """查询-->参数传入全局变量模块再调用的方法
+            先判断是否存在信号,不存在就不用打开查询,存在就再判断dock窗口是否创建过.
+                再判断dock窗口是关闭隐藏状态还是显示状态,显示状态就退出,关闭状态就show
+        """
+        if hasattr(self, 'm_slot'):
+            if self.findChild(QDockWidget, "dockWidget"):
+                if self.dock.dockWidget.isHidden():
+                    self.dock.show()
+                else:
+                    return
+
             self.dock = DockMain()
             self.addDockWidget(Qt.DockWidgetArea(4), self.dock.dockWidget)
             # 连接子窗口的自定义信号与主窗口的槽函数.m_slot为槽变量,根据工作目录选中而来
             self.dock.Signal_dockparam.connect(self.m_slot)
+        else:
+            return
 
+#===========================标题栏=====================================
     @pyqtSlot()
     def on_actionTile_triggered(self):  # 平铺mid窗口
         self.mdi.tileSubWindows()
@@ -284,12 +334,15 @@ class Main(QMainWindow, Ui_MainWindow):
         cursor.insertText('self.deli.lineEdit_5.text()')
         document.print(printer)
 
+    def clearVar(self):
+        """清除保存/查询变量"""
+        if hasattr(self, 'm_slot'):
+            del self.m_slot
+        elif hasattr(self, 'm_save'):
+            del self.m_save
+        else:
+            return
 
-# class QueryForm(QWidget, Ui_Query_Form): # 工作-->查询
-    # """查询报表功能"""
-    # def __init__(self):
-    #     super(QueryForm, self).__init__()
-    #     self.setupUi(self)
 
 
 class FirstForm(QWidget, Ui_First_Form): # 首页
@@ -328,11 +381,10 @@ class FirstForm(QWidget, Ui_First_Form): # 首页
         self.textWeather.setText(result)
 
 
-
 if __name__=="__main__":
     app = QApplication(sys.argv)
     splash = QSplashScreen()
-    splash.setPixmap(QPixmap('./wxxd/images/20191.jpg'))
+    splash.setPixmap(QPixmap('./wxxd/images/just do it.jpg'))
     splash.show()
     splash.showMessage('欢迎试用星达ERP',
                        Qt.AlignBottom | Qt.AlignCenter, Qt.white)

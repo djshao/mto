@@ -103,8 +103,8 @@ class DateDialog(QDialog):
         # self.clearData()
         m_state = self.cbo_state.currentText()
         res = myMdb().fetchall(field='distinct 公司名称',
-                                table='报价基本信息',
-                                where='状态='+"'"+m_state+"'")
+                               table='报价基本信息',
+                               where='状态='+"'"+m_state+"'")
         no_lst = [tup[0] for tup in res[0]]
         self.cbo_group.insertItem(0, "选择公司名称")
         self.cbo_group.addItems(no_lst)
@@ -129,7 +129,7 @@ class DateDialog(QDialog):
         else:
             m_no = self.cbo_filter.currentText()
             res = myMdb().fetchall(table='报价基本信息',
-                                    where="报价单号="+"'"+m_no+"'")
+                                   where="报价单号="+"'"+m_no+"'")
         if res[0] == ():
             return
         # data[1]是cur,data[0]是data数据

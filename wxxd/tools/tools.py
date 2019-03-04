@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+"""工具函数模块"""
+
 from PyQt5.QtWidgets import *
 
 from decimal import Decimal
 
-"""工具函数模块"""
+
 
 # 计算列值总数函数plus 加,和
 def plusColumn(self, name, l):
@@ -18,7 +20,7 @@ def plusColumn(self, name, l):
         if not m_child.item(i, l) or m_child.item(i, l).text() == "":
             return count
         else:
-            count += int(m_child.item(i, l).text())
+            count += Decimal(m_child.item(i, l).text())
     return count
 
     #     # 判断不存在和空值,并设为0值

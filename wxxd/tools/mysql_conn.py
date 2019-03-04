@@ -70,7 +70,7 @@ class myMdb(object):
         """executemany批量插入数据库"""
         # a = "ON DUPLICATE KEY UPDATE"  # 自动判断是否有记录,待研究??????
         try:
-            # print(sql)
+            print(sql)
             self.__cursor.executemany(sql, param)
             self.__db.commit()
             rowcount = self.__cursor.rowcount
@@ -189,7 +189,7 @@ class myMdb(object):
         where = 'where' in kwargs and 'where '+kwargs['where'] or ''
         #order
         order = 'order' in kwargs and 'order by '+ kwargs['order'] or ''
-        sql = 'select %s from %s %s %s limit 1'%(field,table,where,order)
+        sql = 'select %s from %s %s %s limit 1'%(field, table, where, order)
         # print(sql)
         try:
             # 执行SQL语句

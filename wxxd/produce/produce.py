@@ -28,7 +28,7 @@ class Machine(QWidget, Ui_wgtInput):
         # self.mymdb = myMdb()
 
         # 隐藏不需要的控件
-        self.btn_query.hide()
+        # self.btn_query.hide()
         self.cmbWork.hide()
         self.comboBox_2.hide()
         self.cmbNO.setEditable(True)
@@ -736,10 +736,10 @@ class OpenDialog(QDialog, Ui_Dialog): # 订单明细查询弹窗
         self.cmbCO.clear()
         # self.clearData()
         m_state = self.cmbState.currentText()
-        res = mymdb.fetchall(field='distinct 买方',
-                                table='orders',
-                                where='订单状态='+"'"+m_state+"'")
-        no_lst = [tup[0] for tup in res[0]]
+        res, cur = mymdb.fetchall(field='{}'.format('distinct 买方'),
+                                  table='{}'.format('orders'),
+                                  where="订单状态='{}'".format(m_state))
+        no_lst = [tup[0] for tup in res]
         self.cmbCO.addItems(no_lst)
 
     def cmbCO_currentIndexChanged(self):

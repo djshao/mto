@@ -81,7 +81,7 @@
     <property name="title">
      <string>工作(&amp;K)</string>
     </property>
-    <widget class="QMenu" name="menu">
+    <widget class="QMenu" name="menu_SD">
      <property name="title">
       <string>销售</string>
      </property>
@@ -89,13 +89,36 @@
       <iconset resource="../myImage.qrc">
        <normaloff>:/myImage/images/quote.ico</normaloff>:/myImage/images/quote.ico</iconset>
      </property>
+     <widget class="QMenu" name="menu_2">
+      <property name="title">
+       <string>运输发货</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../myImage.qrc">
+        <normaloff>:/myImage/images/logistics_32px.ico</normaloff>:/myImage/images/logistics_32px.ico</iconset>
+      </property>
+      <widget class="QMenu" name="menu_9">
+       <property name="title">
+        <string>发货清单</string>
+       </property>
+       <addaction name="actionDL"/>
+       <addaction name="actionDR"/>
+      </widget>
+      <addaction name="menu_9"/>
+      <addaction name="actionPK"/>
+      <addaction name="actionTS"/>
+      <addaction name="separator"/>
+      <addaction name="actionWR"/>
+     </widget>
      <addaction name="actionQuote"/>
      <addaction name="actionCheck"/>
      <addaction name="actionAdjust"/>
      <addaction name="separator"/>
      <addaction name="actionOrder"/>
+     <addaction name="actionfp"/>
+     <addaction name="menu_2"/>
     </widget>
-    <widget class="QMenu" name="menu_QA">
+    <widget class="QMenu" name="menu_QM">
      <property name="title">
       <string>质保</string>
      </property>
@@ -118,7 +141,7 @@
      <addaction name="menu_6"/>
      <addaction name="actionInspection"/>
     </widget>
-    <widget class="QMenu" name="menu_10">
+    <widget class="QMenu" name="menu_WM">
      <property name="title">
       <string>仓库</string>
      </property>
@@ -130,7 +153,7 @@
      <addaction name="actionwujin_2"/>
      <addaction name="actionshebei"/>
     </widget>
-    <widget class="QMenu" name="menu_2">
+    <widget class="QMenu" name="menu_PP">
      <property name="title">
       <string>生产</string>
      </property>
@@ -181,7 +204,7 @@
      <addaction name="actionjiagongtuzhi"/>
      <addaction name="actionbiaozhunguifan"/>
     </widget>
-    <widget class="QMenu" name="menu_9">
+    <widget class="QMenu" name="menu_MM">
      <property name="title">
       <string>采购</string>
      </property>
@@ -191,6 +214,7 @@
      </property>
      <addaction name="actiongangcai"/>
      <addaction name="actionwujin"/>
+     <addaction name="actiongys"/>
     </widget>
     <widget class="QMenu" name="menu_11">
      <property name="title">
@@ -201,28 +225,24 @@
      <addaction name="actionsc"/>
      <addaction name="actionjindu"/>
     </widget>
-    <widget class="QMenu" name="menu_5">
+    <widget class="QMenu" name="menu">
      <property name="title">
-      <string>发货</string>
+      <string>财务</string>
      </property>
      <property name="icon">
       <iconset resource="../myImage.qrc">
-       <normaloff>:/myImage/images/logistics_32px.ico</normaloff>:/myImage/images/logistics_32px.ico</iconset>
+       <normaloff>:/myImage/images/finance.png</normaloff>:/myImage/images/finance.png</iconset>
      </property>
-     <addaction name="actionDeliveryList"/>
-     <addaction name="actionPackingList"/>
-     <addaction name="actionWarranty"/>
-     <addaction name="actionLogistics"/>
+     <addaction name="actionYS"/>
     </widget>
     <addaction name="actionHomepage"/>
     <addaction name="separator"/>
+    <addaction name="menu_SD"/>
+    <addaction name="menu_PP"/>
+    <addaction name="menu_QM"/>
+    <addaction name="menu_MM"/>
+    <addaction name="menu_WM"/>
     <addaction name="menu"/>
-    <addaction name="menu_2"/>
-    <addaction name="menu_QA"/>
-    <addaction name="menu_9"/>
-    <addaction name="menu_10"/>
-    <addaction name="menu_5"/>
-    <addaction name="actionFinance"/>
     <addaction name="menu_8"/>
     <addaction name="menu_11"/>
     <addaction name="actionziyuan"/>
@@ -256,6 +276,12 @@
    <addaction name="actionprint"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <attribute name="dockWidgetArea">
+    <number>4</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="../myImage.qrc">
@@ -274,7 +300,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="../myImage.qrc">
-     <normaloff>:/myImage/images/open.png</normaloff>:/myImage/images/open.png</iconset>
+     <normaloff>:/myImage/images/open.ico</normaloff>:/myImage/images/open.ico</iconset>
    </property>
    <property name="text">
     <string>打开(&amp;O)...</string>
@@ -289,7 +315,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="../myImage.qrc">
-     <normaloff>:/myImage/images/save.png</normaloff>:/myImage/images/save.png</iconset>
+     <normaloff>:/myImage/images/save.ico</normaloff>:/myImage/images/save.ico</iconset>
    </property>
    <property name="text">
     <string>保存(&amp;S)</string>
@@ -491,15 +517,6 @@
     <string>首页</string>
    </property>
   </action>
-  <action name="actionFinance">
-   <property name="icon">
-    <iconset resource="../myImage.qrc">
-     <normaloff>:/myImage/images/finance.png</normaloff>:/myImage/images/finance.png</iconset>
-   </property>
-   <property name="text">
-    <string>财务</string>
-   </property>
-  </action>
   <action name="actionQuote">
    <property name="icon">
     <iconset resource="../myImage.qrc">
@@ -685,7 +702,7 @@
   </action>
   <action name="actionziyuan">
    <property name="text">
-    <string>资源管理</string>
+    <string>人力资源</string>
    </property>
   </action>
   <action name="actionorder">
@@ -732,24 +749,69 @@
     <string>机加进度录入</string>
    </property>
   </action>
-  <action name="actionDeliveryList">
-   <property name="text">
-    <string>送货清单</string>
-   </property>
-  </action>
   <action name="actionWarranty">
    <property name="text">
     <string>质保书</string>
    </property>
   </action>
-  <action name="actionLogistics">
+  <action name="actionTransport">
    <property name="text">
-    <string>物流</string>
+    <string>物流记录</string>
    </property>
   </action>
-  <action name="actionPackingList">
+  <action name="actionPacking">
    <property name="text">
-    <string>装箱单</string>
+    <string>包装运输</string>
+   </property>
+  </action>
+  <action name="actionDeliveryList">
+   <property name="text">
+    <string>新增</string>
+   </property>
+  </action>
+  <action name="actionDeliveryRevise">
+   <property name="text">
+    <string>修改</string>
+   </property>
+  </action>
+  <action name="actionYS">
+   <property name="text">
+    <string>应收账款</string>
+   </property>
+  </action>
+  <action name="actionfp">
+   <property name="text">
+    <string>发票</string>
+   </property>
+  </action>
+  <action name="actiongys">
+   <property name="text">
+    <string>供应商管理</string>
+   </property>
+  </action>
+  <action name="actionTS">
+   <property name="text">
+    <string>物流记录</string>
+   </property>
+  </action>
+  <action name="actionWR">
+   <property name="text">
+    <string>质保书</string>
+   </property>
+  </action>
+  <action name="actionPK">
+   <property name="text">
+    <string>包装运输</string>
+   </property>
+  </action>
+  <action name="actionDL">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="actionDR">
+   <property name="text">
+    <string>修改</string>
    </property>
   </action>
  </widget>
